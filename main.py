@@ -1,4 +1,8 @@
 #Establishing the main python file to run the modular code.
+#to run streamlit run the command from the root:
+#py -m streamlit run main.py
+
+from utils.Views.Home import testDisplay
 
 if __name__ == "__main__":
-    pass
+    testDisplay()
