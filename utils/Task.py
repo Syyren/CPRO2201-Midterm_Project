@@ -41,18 +41,35 @@ due date: {self.getDueDate()}''')
 
 #Declaring the personal tasks child class
 class PersonalTask(Task):
-    def __init__(self, title, description = None):
+    def __init__(self, title, description = None, friends = []):
         super().__init__(title, description)
+        #custom properties for the personal task child class
+        self._friends : list = friends
+    #displayAttributes override, displays additional attributes exclusive to this child class
+    def displayAttributes(self):
+        super().displayAttributes()
+        print(f'''friends: {self.getFriends()}''')
+
+    def getFriends(self):
+        return self._friends
+    
+    def setFriends(self, friends):
+        if len(friends) > 0:
+            for friend in friends:
+                self._friends.append(friend)
 
 #Declaring the work tasks child class
 class WorkTask(Task):
-    def __init__(self, title, description = None):
+    def __init__(self, title, description = None, collaborators = []):
         super().__init__(title, description)
-        _length : str = None
-
+        #custom properties for the work task child class
+        self._length : str = None
+        self._collaborators : list = collaborators
+    #displayAttributes override, displays additional attributes exclusive to this child class
     def displayAttributes(self):
         super().displayAttributes()
-        print(f"length: {self.getLength()}")
+        print(f'''length: {self.getLength()}
+collaborators: {self.getCollaborators()}''')
 
     def getLength(self):
         return self._length
@@ -63,7 +80,15 @@ class WorkTask(Task):
         else:
             self._length = None
 
+    def getCollaborators(self):
+        return self._collaborators
+    
+    def setCollaborators(self, collaborators):
+        if len(collaborators) > 0:
+            for collaborator in collaborators:
+                self._collaborators.append(collaborator)
 
+#just testing the classes and child classes
 if __name__ == "__main__":
     test_task = Task("Get Food", "Go to the store and grab some food.")
     test_task.setDueDate(2024, 10, 12, 4, 16)
