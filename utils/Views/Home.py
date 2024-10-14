@@ -1,0 +1,1 @@
+#module that establishes the "view" as we are using an application front end.
