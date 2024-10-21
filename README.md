@@ -1,5 +1,6 @@
 # CPRO2201-Midterm_Project
 
 pip i:
-python-dotenv
-"pymongo[srv]"
+- python-dotenv
+- "pymongo[srv]"
+- streamlit
