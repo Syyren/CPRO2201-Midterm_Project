@@ -3,7 +3,7 @@
 import streamlit as st
 from ..Models.Task import Task
 
-test_task = Task("Groceries", "Go to store:\n-Eggs\n-Bacon\n-Celery")
+test_task = Task("Groceries", "Go to store: Eggs, Bacon, Celery")
 
 def testDisplay():
     if st.checkbox('Show message'):

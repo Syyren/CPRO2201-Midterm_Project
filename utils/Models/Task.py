@@ -5,6 +5,7 @@ import datetime
 class Task():
     #constructor, takes a title and description string, sets a default due date and creation time
     def __init__(self, title : str, description : str = None):
+        self.id = "temp_id"
         self._title = title
         self._description = description
         self._due_date : datetime = None
