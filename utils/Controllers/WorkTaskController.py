@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..Models import Task
+from ..Models import WorkTask
 
 #For handling interraction with mongo and the view
 
@@ -11,7 +11,7 @@ load_dotenv()
 uri = os.getenv("MONGO_CONNECTION")
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
-collection = db[f"Regular_Tasks"]
+collection = db[f"Personal_Tasks"]
 
 
 #sending a ping to confirm successful connection
@@ -26,22 +26,16 @@ def getTask():
     cursor = collection.find({})
     return cursor
 
-def createTask(task : Task):
+def createTask(task : WorkTask):
     db_task = {
-        "title" : f"{task.getTitle()}",
-        "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}"
+        #attributes to be determined
     }
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
-def updateTask(task: Task):
+def updateTask(task: WorkTask):
     db_task = {
-        "title" : f"{task.getTitle()}",
-        "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}"
+        #attributes to be determined
     }
     collection.update_one(db_task)
     print(f"Update Successful For ID:")
