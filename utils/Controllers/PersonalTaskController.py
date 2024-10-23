@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..Models import PersonalTask
+from ..Models.PersonalTask import PersonalTask
 
 #For handling interraction with mongo and the view
 
@@ -28,14 +28,22 @@ def getTask():
 
 def createTask(task : PersonalTask):
     db_task = {
-        #attributes to be determined
+        "title" : f"{task.getTitle()}",
+        "description" : f"{task.getDescription()}",
+        "due_date" : f"{task.getDueDate()}",
+        "creation_date" : f"{task.getCreationDate()}",
+        "friends" : f"{task.getFriends()}"
     }
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
 def updateTask(task: PersonalTask):
     db_task = {
-        #attributes to be determined
+        "title" : f"{task.getTitle()}",
+        "description" : f"{task.getDescription()}",
+        "due_date" : f"{task.getDueDate()}",
+        "creation_date" : f"{task.getCreationDate()}",
+        "friends" : f"{task.getFriends()}"
     }
     collection.update_one(db_task)
     print(f"Update Successful For ID:")

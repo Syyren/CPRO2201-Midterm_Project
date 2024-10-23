@@ -2,7 +2,8 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..Models import Task
+from ..Models.Task import Task
+# import datetime
 
 #For handling interraction with mongo and the view
 
@@ -13,11 +14,18 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
 collection = db[f"Regular_Tasks"]
 
-
 #sending a ping to confirm successful connection
 try:
     client.admin.command('ping')
     print("Pinged your deployment. You successfully connected to MongoDB!")
+
+    # try:
+    #     #just a small injection
+    #     task = Task('testTask1','testing the create task method')
+    #     Task.createTask(task)
+    # except Exception as e:
+    #     print("secondary error: \n",e)
+
 except Exception as e:
     print(e)
 
@@ -48,3 +56,6 @@ def updateTask(task: Task):
 
 def deleteTask(task_id):
     collection.delete_one(task_id)
+
+
+
