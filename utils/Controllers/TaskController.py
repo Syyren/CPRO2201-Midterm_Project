@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from ..Models.Task import Task, WorkTask, PersonalTask
+from ..Models.Task import Task
 
 #For handling interraction with mongo and the view
 

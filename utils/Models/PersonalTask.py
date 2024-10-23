@@ -1,4 +1,4 @@
-from Task import Task
+from .Task import Task
 
 #Declaring the personal tasks child class
 class PersonalTask(Task):

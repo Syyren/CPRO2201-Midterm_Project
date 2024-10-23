@@ -2,7 +2,7 @@
 #to run streamlit run the command from the root:
 #py -m streamlit run main.py
 
-from utils.Views.Home import testDisplay
+from utils.Views.Home import mainDisplay
 
 if __name__ == "__main__":
-    testDisplay()
+    mainDisplay()

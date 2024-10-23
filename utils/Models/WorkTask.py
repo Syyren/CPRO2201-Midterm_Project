@@ -1,4 +1,4 @@
-from Task import Task
+from .Task import Task
 
 #Declaring the work tasks child class
 class WorkTask(Task):
