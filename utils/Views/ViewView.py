@@ -1,3 +1,5 @@
+#module that returns the partial view view
+
 import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask

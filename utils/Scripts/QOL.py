@@ -1,9 +1,9 @@
+#file for scripts that do convenient things
+
 import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
-
-#file for scripts that do convenient things
 
 #function that writes details for a regular task
 def printRegTask(task : Task):
