@@ -9,19 +9,6 @@ REG = "Regular"
 PER = "Personal"
 WOR = "Work"
 
-test_task1 = Task("Groceries", "Go to store: Eggs, Bacon, Celery")
-test_task2 = Task("Finish Dishes", "Make sure they sparkle")
-
-test_ptask1 = PersonalTask("See a Movie", "Go see the film", ["Jessica", "Charlie"])
-test_ptask2 = PersonalTask("Date Night", "Going to dinner", ["Stevie"])
-
-test_wtask1 = WorkTask("Finish Report", "Must do")
-test_wtask2 = WorkTask("Meeting", "At the Casino", ["Rob"])
-
-regular_tasks = [test_task1, test_task2]
-personal_tasks = [test_ptask1, test_ptask2]
-work_tasks = [test_wtask1, test_wtask2]
-
 #function that will log in a user to access the tasks page. Currently, just sets a session state to true.
 def userLogin():
     st.session_state.clicked = True
@@ -59,6 +46,25 @@ def printList(list : list):
             string += item
     return string
 
+#simulating the methods from the controller to get a list of the user's various tasks
+def getTasks():
+    test_task1 = Task("Groceries", "Go to store: Eggs, Bacon, Celery")
+    test_task2 = Task("Finish Dishes", "Make sure they sparkle")
+    regular_tasks = [test_task1, test_task2]
+    return regular_tasks
+
+def getPersonalTasks():
+    test_task1 = PersonalTask("See a Movie", "Go see the film", ["Jessica", "Charlie"])
+    test_task2 = PersonalTask("Date Night", "Going to dinner", ["Stevie"])
+    personal_tasks = [test_task1, test_task2]
+    return personal_tasks
+
+def getWorkTasks():
+    test_task1 = WorkTask("Finish Report", "Must do")
+    test_task2 = WorkTask("Meeting", "At the Casino", ["Rob"])
+    work_tasks = [test_task1, test_task2]
+    return work_tasks
+
 #function that defines the view when create is selected, allows user to make new task
 def createView():
     left_column, right_column = st.columns([2, 1])
@@ -70,9 +76,13 @@ def createView():
     
     with left_column:
         st.write(f"Please enter the details for your {task_type} task.")
-        
+
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView():
+
+    regular_tasks = getTasks()
+    personal_tasks = getPersonalTasks()
+    work_tasks = getWorkTasks()
 
     left_column, right_column = st.columns([1, 2])
 
@@ -92,13 +102,13 @@ def viewView():
                     task_list.append(work_tasks)
             st.write(f"Viewing details for your {printList(task_types)} tasks.")
             for type_list in task_list:
-                if isinstance(type_list[0], Task):
+                if type(type_list[0]) is Task:
                     for task in type_list:
                         printRegTask(task)
-                if isinstance(type_list[0], PersonalTask):
+                elif type(type_list[0]) is PersonalTask:
                     for task in type_list:
                         printPersonalTask(task)
-                if isinstance(type_list[0], WorkTask):
+                elif type(type_list[0]) is WorkTask:
                     for task in type_list:
                         printWorkTask(task)
         else:
