@@ -24,6 +24,19 @@ def printWorkTask(task : WorkTask):
     if len(task.getCollaborators()) > 0:
         st.write(f"Collaborators: {printList(task.getCollaborators())}")
 
+def taskPrint(type_list : list):
+    if len(type_list) == 0:
+        print("Empty List")
+    elif type(type_list[0]) is Task:
+        for task in type_list:
+            printRegTask(task)
+    elif type(type_list[0]) is PersonalTask:
+        for task in type_list:
+            printPersonalTask(task)
+    elif type(type_list[0]) is WorkTask:
+        for task in type_list:
+            printWorkTask(task)
+
 #function that prints a list in a nice readable way
 def printList(list : list):
     string = ""
