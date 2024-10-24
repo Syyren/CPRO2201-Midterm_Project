@@ -1,4 +1,5 @@
 import os
+import datetime
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -21,8 +22,10 @@ def getAllTasks():
     for doc in cursor:
         task = Task(doc["title"],doc["description"])
         task.setId(doc["_id"])
-        task.setDueDate(doc['due_date'])
-        task.setCreationDate(doc["creation_date"])
+        print(f"Creation Date from Mongo: {doc["creation_date"]}")
+        if doc["due_date"] != "None":
+            task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
+        task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
     return list(all_tasks)
 
@@ -45,7 +48,7 @@ def createTask(task : Task):
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
         "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}"
+        "creation_date" : f"{datetime.datetime.task.getCreationDate().strftime('%Y-%m-%d %H:%M:%S.%f')}"
     }
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
