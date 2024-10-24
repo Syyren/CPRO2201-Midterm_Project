@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from bson.objectid import ObjectId
 from ..Models.Task import Task
 #For handling interraction with mongo and the view
 
@@ -19,10 +20,9 @@ def getAllTasks():
     cursor = collection.find({})
     return cursor
 
-
-#INCOMPLETE
-def getTask(id):
-    return collection.find_one({ "_id": id })
+def getTask():
+    return collection.find_one()
+     
 
 def createTask(task : Task):
     db_task = {
@@ -36,23 +36,37 @@ def createTask(task : Task):
 
 
 #INCOMPLETE
-def updateTask(task: Task, updated_key_value: dict):
-    collection.update_one({"_id": task.getId()}, {"$set": updated_key_value})
-    print(f"Update Successful For ID:")
+def updateTask(task : Task, update_key, new_value):    
+    task_id = collection.find_one_and_update({"title": task.getTitle()}, {"$set": {update_key : new_value}})
+    print(f"Update For ID: {task_id}")
 
 def deleteTask(task_id):
     collection.delete_one(task_id)
-
-
 
 #sending a ping to confirm successful connection
 try:
     client.admin.command('ping')
     print("Pinged your deployment. You successfully connected to MongoDB!")
-    # try:
-    #     print("getting a task...")
-    #     print(getTask("67187ff4475432be422d0dc3"))
-    # except Exception as e:
-    #     print('error getting task')
+
+    print("getting data... ")
+    data = getAllTasks()
+    i = 0
+    for doc in data:
+        i += 1
+        print(f"doc {i}: {doc}")
+
+    print("updating data... ")
+    task = getTask()
+    task_ob = Task(task['title'],task['description'])
+    task_ob.setId(task["_id"])
+    updateTask(task_ob, 'title', 'UpdateTask1')
+
+    print("getting new data...")
+    data = getAllTasks()
+    i = 0
+    for doc in data:
+        i += 1
+        print(f"doc {i}: {doc}")
+
 except Exception as e:
     print(e)
