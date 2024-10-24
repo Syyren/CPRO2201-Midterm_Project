@@ -1,0 +1,19 @@
+.card{
+    background-color: #222222;
+    border-radius: 10px;
+    border-width: 3px;
+    padding: 5px;
+    user-select: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.title{
+    font-size: large;
+}
+
+.created{
+    color: #9c9c9c;
+}
