@@ -1,5 +1,6 @@
 #module that returns the partial view view
 
+import datetime
 import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
@@ -10,7 +11,7 @@ from ..Scripts.QOL import printList, taskPrint, applyCSS
 def getTasks():
     test_task1 = Task("Groceries", "Go to store: Eggs, Bacon, Celery")
     test_task2 = Task("Finish Dishes", "Make sure they sparkle")
-    test_task1.setDueDate(2024, 10, 24, 4, 30)
+    test_task1.setDueDate(datetime.datetime(2024, 10, 24, 4, 30))
     regular_tasks = [test_task1, test_task2]
     return regular_tasks
 

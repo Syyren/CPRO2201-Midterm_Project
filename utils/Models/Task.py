@@ -40,9 +40,6 @@ due date: {self.getDueDate()}''')
     def getDueDate(self):
         return self._due_date
 
-    def setDueDate(self, year: int, month: int, day: int, hour: int, minute: int):
-        self._due_date = datetime.datetime(year, month, day, hour, minute)
-
     def setDueDate(self, due_date : datetime):
         self._due_date = due_date
 
