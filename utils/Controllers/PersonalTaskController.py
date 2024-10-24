@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from ..Models.PersonalTask import PersonalTask
-
 #For handling interraction with mongo and the view
 
 #getting the connection path from the .env file and connecting to the client
@@ -13,20 +12,33 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
 collection = db[f"Personal_Tasks"]
 
-
-#sending a ping to confirm successful connection
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
-
 #retreiving all tasks in collection as cursor instance
-def getTask():
+def getAllPersonalTasks():
     cursor = collection.find({})
-    return cursor
+    all_tasks = []
+    for doc in cursor:
+        task = PersonalTask(doc["title"],doc["description"],doc["friends"])
+        task.setId(doc["_id"])
+        task.setDueDate(doc['due_date'])
+        task.setCreationDate(doc["creation_date"])
+        all_tasks.append(task)
+    return list(all_tasks)
 
-def createTask(task : PersonalTask):
+#retrieving task by id and returning as PersonalTask object.
+def getPersonalTaskById(id):
+    cursor = collection.find_one({"_id":id})
+    db_task = PersonalTask(
+        cursor["title"],
+        cursor["description"],
+        cursor["friends"]
+    )
+    db_task.setId(cursor["_id"])
+    db_task.setDueDate(cursor['due_date'])
+    db_task.setCreationDate(cursor["creation_date"])
+    return db_task
+
+#creating personal task and inserting to db
+def createPersonalTask(task : PersonalTask):
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
@@ -37,16 +49,19 @@ def createTask(task : PersonalTask):
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
-def updateTask(task: PersonalTask):
-    db_task = {
-        "title" : f"{task.getTitle()}",
-        "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}",
-        "friends" : f"{task.getFriends()}"
-    }
-    collection.update_one(db_task)
-    print(f"Update Successful For ID:")
+#Takes a personal task object, and the key:value to be updated and updates db
+def updateTask(task : PersonalTask, update_key, new_value):  
+    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
+    print(f"Update For ID: {task_id}")
 
-def deleteTask(task_id):
-    collection.delete_one(task_id)
+#Takes personal task object, deletes by id
+def deleteTask(task : PersonalTask):
+    collection.delete_one({"_id":task.getId()})
+
+#sending a ping to confirm successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!"+"\n")
+
+except Exception as e:
+    print(e)
