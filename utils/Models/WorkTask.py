@@ -22,6 +22,9 @@ collaborators: {self.getCollaborators()}''')
         else:
             self._length = None
 
+    def setLength(self, length: str):
+        self._length = length
+
     def getCollaborators(self):
         return self._collaborators
     

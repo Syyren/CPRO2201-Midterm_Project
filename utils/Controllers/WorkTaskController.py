@@ -11,21 +11,40 @@ load_dotenv()
 uri = os.getenv("MONGO_CONNECTION")
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
-collection = db[f"Personal_Tasks"]
+collection = db[f"Work_Tasks"]
 
 
-#sending a ping to confirm successful connection
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
 
-#retreiving all tasks in collection as cursor instance
-def getTask():
+#retreiving all tasks in collection as cursor, then convert to list of WorkTasks
+def getAllWorkTasks():
     cursor = collection.find({})
-    return cursor
+    all_tasks = []
+    for doc in cursor:
+        task = WorkTask(doc["title"],doc["description"], doc["collaborators"])
+        task.setId(doc["_id"])
+        task.setDueDate(doc['due_date'])
+        task.setCreationDate(doc["creation_date"])
+        task.setLength(doc['length'])
+        all_tasks.append(task)
+    return list(all_tasks)
 
+
+
+#retrieving task by id and returning as WorkTask object.
+def getTaskById(id):
+    cursor = collection.find_one({"_id":id})
+    db_task = WorkTask(
+        cursor["title"],
+        cursor["description"],
+        cursor['collaborators']
+    )
+    db_task.setId(cursor["_id"])
+    db_task.setDueDate(cursor['due_date'])
+    db_task.setCreationDate(cursor["creation_date"])
+    db_task.setLength(cursor['length'])
+    return db_task
+     
+#creating WorkTask and inserting to db
 def createTask(task : WorkTask):
     db_task = {
         "title" : f"{task.getTitle()}",
@@ -38,17 +57,19 @@ def createTask(task : WorkTask):
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
-def updateTask(task: WorkTask):
-    db_task = {
-        "title" : f"{task.getTitle()}",
-        "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}",
-        "length" : f"{task.getLength()}",
-        "collaborators" : f"{task.getCollaborators()}"
-    }
-    collection.update_one(db_task)
-    print(f"Update Successful For ID:")
+#Takes a WorkTask object, and the key:value to be updated and updates db
+def updateTask(task : WorkTask, update_key, new_value):  
+    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
+    print(f"Update For ID: {task_id}")
 
+#Takes WorkTask object, deletes by id
 def deleteTask(task_id):
     collection.delete_one(task_id)
+
+
+#sending a ping to confirm successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
