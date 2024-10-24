@@ -45,7 +45,7 @@ def createPersonalTask(task : PersonalTask):
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
         "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{datetime.datetime.task.getCreationDate().strftime('%Y-%m-%d %H:%M:%S.%f')}",
+        "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}",
         "friends" : f"{task.getFriends()}"
     }
     task_id = collection.insert_one(db_task).inserted_id

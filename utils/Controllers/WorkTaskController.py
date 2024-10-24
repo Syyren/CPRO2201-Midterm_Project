@@ -52,7 +52,7 @@ def createTask(task : WorkTask):
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
         "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{datetime.datetime.task.getCreationDate().strftime('%Y-%m-%d %H:%M:%S.%f')}",
+        "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}",
         "length" : f"{task.getLength()}",
         "collaborators" : f"{task.getCollaborators()}"
     }
