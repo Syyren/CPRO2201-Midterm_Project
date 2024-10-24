@@ -11,3 +11,16 @@ def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"
     
     with left_column:
         st.write(f"Please enter the details for your {task_type} task.")
+
+        with st.form("reg_task_form"):
+            title = st.text_input("Title"),
+            description = st.text_input("Description")
+            due_date = None
+            show_optional = st.checkbox("Date?:")
+            if show_optional:
+                due_date = st.date_input("Please choose your task date.")
+            submitted = st.form_submit_button("Submit")
+            if submitted:
+                st.write(f"Title: {title} Description: {description} Due Date: {due_date}")
+        if st.checkbox("Date?"):
+                due_date = st.date_input("Please choose your task date.")
