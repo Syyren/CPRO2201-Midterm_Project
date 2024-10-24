@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
 from ..Models.Task import Task
 #For handling interraction with mongo and the view
 
@@ -15,13 +14,22 @@ collection = db[f"Regular_Tasks"]
 
 
 
-#retreiving all tasks in collection as cursor instance
+#retreiving all tasks in collection as cursor, then convert to list of Tasks
 def getAllTasks():
     cursor = collection.find({})
-    return cursor
+    all_tasks = []
+    for doc in cursor:
+        task = Task(doc["title"],doc["description"])
+        task.setId(doc["_id"])
+        task.setDueDate(doc['due_date'])
+        task.setCreationDate(doc["creation_date"])
+        all_tasks.append(task)
+    return list(all_tasks)
 
-def getTask():
-    cursor = collection.find_one()
+
+#retrieving task by id and returning as Task object.
+def getTaskById(id):
+    cursor = collection.find_one({"_id":id})
     db_task = Task(
         cursor["title"],
         cursor["description"]
@@ -31,7 +39,7 @@ def getTask():
     db_task.setCreationDate(cursor["creation_date"])
     return db_task
      
-
+#creating task and inserting to db
 def createTask(task : Task):
     db_task = {
         "title" : f"{task.getTitle()}",
@@ -43,36 +51,19 @@ def createTask(task : Task):
     print(f"Insert Successful! Given ID: {task_id}")
 
 
-#INCOMPLETE
+#Takes a task object, and the key:value to be updated and updates db
 def updateTask(task : Task, update_key, new_value):  
     task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
     print(f"Update For ID: {task_id}")
 
-def deleteTask(task_id):
-    collection.delete_one(task_id)
+#Takes task object, deletes by id
+def deleteTask(task : Task):
+    collection.delete_one({"_id":task.getId()})
 
-#sending a ping to confirm successful connection
+#Sending a ping to confirm successful connection
 try:
     client.admin.command('ping')
     print("Pinged your deployment. You successfully connected to MongoDB!")
-
-    print("getting data... ")
-    data = getAllTasks()
-    i = 0
-    for doc in data:
-        i += 1
-        print(f"doc {i}: {doc}")
-
-    print("updating data... ")
-    task = getTask()
-    updateTask(task, 'title', 'UpdateTask69')
-
-    print("getting new data...")
-    data = getAllTasks()
-    i = 0
-    for doc in data:
-        i += 1
-        print(f"doc {i}: {doc}")
 
 except Exception as e:
     print(e)
