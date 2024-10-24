@@ -9,7 +9,7 @@ class Task():
         self._title = title
         self._description = description
         self._due_date : datetime = None
-        self.__creation_date: datetime = datetime.datetime.now
+        self.__creation_date: datetime = datetime.datetime.now()
 
     #function that outputs the key attributes of the task object
     def displayAttributes(self):

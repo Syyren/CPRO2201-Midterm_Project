@@ -4,7 +4,7 @@ import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
-from ..Scripts.QOL import printList, taskPrint
+from ..Scripts.QOL import printList, taskPrint, applyCSS
 
 #simulating the methods from the controller to get a list of the user's various tasks
 def getTasks():
@@ -27,11 +27,12 @@ def getWorkTasks():
 
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
+    applyCSS()
     regular_tasks = getTasks()
     personal_tasks = getPersonalTasks()
     work_tasks = getWorkTasks()
 
-    left_column, right_column = st.columns([1, 3])
+    left_column, right_column = st.columns([1, 2])
 
     with left_column:
         task_types = st.multiselect("Tasks", options=[REG, PER, WOR],)
