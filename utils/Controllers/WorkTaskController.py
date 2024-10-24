@@ -32,7 +32,7 @@ def getAllWorkTasks():
 
 
 #retrieving task by id and returning as WorkTask object.
-def getTaskById(id):
+def getWorkTaskById(id):
     cursor = collection.find_one({"_id":id})
     db_task = WorkTask(
         cursor["title"],
