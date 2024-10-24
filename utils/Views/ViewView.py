@@ -1,19 +1,11 @@
 #module that returns the partial view view
 
-import datetime
 import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
+from ..Controllers.TaskController import getAllTasks
 from ..Scripts.QOL import printList, taskPrint, applyCSS
-
-#simulating the methods from the controller to get a list of the user's various tasks
-def getTasks():
-    test_task1 = Task("Groceries", "Go to store: Eggs, Bacon, Celery")
-    test_task2 = Task("Finish Dishes", "Make sure they sparkle")
-    test_task1.setDueDate(datetime.datetime(2024, 10, 24, 4, 30))
-    regular_tasks = [test_task1, test_task2]
-    return regular_tasks
 
 def getPersonalTasks():
     test_task1 = PersonalTask("See a Movie", "Go see the film", ["Jessica", "Charlie", "Beffica"])
@@ -30,7 +22,7 @@ def getWorkTasks():
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
     applyCSS()
-    regular_tasks = getTasks()
+    regular_tasks = getAllTasks()
     personal_tasks = getPersonalTasks()
     work_tasks = getWorkTasks()
 
