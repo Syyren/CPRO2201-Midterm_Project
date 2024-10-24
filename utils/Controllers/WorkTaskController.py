@@ -1,4 +1,5 @@
 import os
+import datetime
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -39,8 +40,9 @@ def getTaskById(id):
         cursor['collaborators']
     )
     db_task.setId(cursor["_id"])
-    db_task.setDueDate(cursor['due_date'])
-    db_task.setCreationDate(cursor["creation_date"])
+    if cursor["due_date"] != "None":
+        db_task.setDueDate(datetime.datetime.strptime(cursor['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
+    db_task.setCreationDate(datetime.datetime.strptime(cursor['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
     db_task.setLength(cursor['length'])
     return db_task
      
@@ -50,7 +52,7 @@ def createTask(task : WorkTask):
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
         "due_date" : f"{task.getDueDate()}",
-        "creation_date" : f"{task.getCreationDate()}",
+        "creation_date" : f"{datetime.datetime.task.getCreationDate().strftime('%Y-%m-%d %H:%M:%S.%f')}",
         "length" : f"{task.getLength()}",
         "collaborators" : f"{task.getCollaborators()}"
     }
