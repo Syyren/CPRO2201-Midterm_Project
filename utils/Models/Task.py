@@ -5,7 +5,7 @@ import datetime
 class Task():
     #constructor, takes a title and description string, sets a default due date and creation time
     def __init__(self, title : str, description : str = None):
-        self.id = "temp_id"
+        self._id = "temp_id"
         self._title = title
         self._description = description
         self._due_date : datetime = None
@@ -43,8 +43,14 @@ due date: {self.getDueDate()}''')
     def setDueDate(self, year: int, month: int, day: int, hour: int, minute: int):
         self._due_date = datetime.datetime(year, month, day, hour, minute)
 
+    def setDueDate(self, due_date : datetime):
+        self._due_date = due_date
+
     def getCreationDate(self):
         return self.__creation_date
+    
+    def setCreationDate(self, creation_date : datetime):
+        self.__creation_date = creation_date
 
 #just testing
 if __name__ == "__main__":

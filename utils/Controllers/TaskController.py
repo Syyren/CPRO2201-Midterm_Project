@@ -21,7 +21,15 @@ def getAllTasks():
     return cursor
 
 def getTask():
-    return collection.find_one()
+    cursor = collection.find_one()
+    db_task = Task(
+        cursor["title"],
+        cursor["description"]
+    )
+    db_task.setId(cursor["_id"])
+    db_task.setDueDate(cursor['due_date'])
+    db_task.setCreationDate(cursor["creation_date"])
+    return db_task
      
 
 def createTask(task : Task):
@@ -36,8 +44,8 @@ def createTask(task : Task):
 
 
 #INCOMPLETE
-def updateTask(task : Task, update_key, new_value):    
-    task_id = collection.find_one_and_update({"title": task.getTitle()}, {"$set": {update_key : new_value}})
+def updateTask(task : Task, update_key, new_value):  
+    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
     print(f"Update For ID: {task_id}")
 
 def deleteTask(task_id):
@@ -57,9 +65,7 @@ try:
 
     print("updating data... ")
     task = getTask()
-    task_ob = Task(task['title'],task['description'])
-    task_ob.setId(task["_id"])
-    updateTask(task_ob, 'title', 'UpdateTask1')
+    updateTask(task, 'title', 'UpdateTask69')
 
     print("getting new data...")
     data = getAllTasks()
