@@ -16,6 +16,38 @@ def taskSubmitted(title : str, description : str, due_date : datetime):
     st.write(f"Description: {description}")
     st.write(f"Due Date: {due_date}")
 
+def formGenerator(form_name, 
+                  date_check_text = "Would you like to submit a due date?",
+                  title_txt = "Title", desc_txt = "Description",
+                  due_txt = "Due Date",
+                  submit_txt = "Submit",
+                  PER = "Personal",
+                  WOR = "Work"):
+    date_check = st.checkbox(date_check_text)
+    if form_name == PER:
+        friend_slider = st.slider("Friends", 0, 5, 0)
+    elif form_name == WOR:
+        collaborator_slider = st.slider("Collaborators", 0, 8, 0)
+    with st.form(form_name):
+        title = st.text_input(title_txt),
+        description = st.text_input(desc_txt)
+        due_date = None
+        if date_check:
+            due_date = st.date_input(due_txt)
+        if form_name == PER:
+            friends = []
+            for i in range(friend_slider):
+                friend_name = st.text_input(f"Friend {i + 1}'s Name")
+                friends.append(friend_name)
+        elif form_name == WOR:
+            collaborators = []
+            for i in range(collaborator_slider):
+                collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name")
+                collaborators.append(collaborator_name)
+        submitted = st.form_submit_button(submit_txt)
+        if submitted:
+            taskSubmitted(title, description, due_date)
+
 #function that defines the view when create is selected, allows user to make new task
 def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
     left_column, right_column = st.columns([2, 1])
@@ -26,33 +58,8 @@ def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"
     with left_column:
         st.write(f"Please enter the details for your {task_type} task.")
         if task_type == REG:
-            with st.form("reg_task_form"):
-                title = st.text_input("Title"),
-                description = st.text_input("Description")
-                due_date = st.date_input("Please choose your task date.")
-                submitted = st.form_submit_button("Submit")
-                if submitted:
-                    taskSubmitted(title, description, due_date)
+            formGenerator(REG)
         elif task_type == PER:
-            with st.form("per_task_form"):
-                title = st.text_input("Title"),
-                description = st.text_input("Description")
-                due_date = st.date_input("Please choose your task date.")
-                submitted = st.form_submit_button("Submit")
-                friend_slider = st.select_slider("How many friends will be there?", 0, 5, 0)
-                friends = []
-                for i in range(friend_slider):
-                    friend_name = st.text_input(f"Friend {i + 1}'s Name")
-                    friends.append(friend_name)
-                if submitted:
-                    taskSubmitted(title, description, due_date)
-                    if friends:
-                        st.write(f"Friends: {printList(friends)}")
+            formGenerator(PER)
         elif task_type == WOR:
-            with st.form("wor_task_form"):
-                title = st.text_input("Title"),
-                description = st.text_input("Description")
-                due_date = st.date_input("Please choose your task date.")
-                submitted = st.form_submit_button("Submit")
-                if submitted:
-                    taskSubmitted(title, description, due_date)
+            formGenerator(WOR)
