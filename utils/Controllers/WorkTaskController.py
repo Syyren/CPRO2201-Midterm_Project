@@ -47,7 +47,7 @@ def getWorkTaskById(id):
     return db_task
      
 #creating WorkTask and inserting to db
-def createTask(task : WorkTask):
+def createWorkTask(task : WorkTask):
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
@@ -60,12 +60,12 @@ def createTask(task : WorkTask):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a WorkTask object, and the key:value to be updated and updates db
-def updateTask(task : WorkTask, update_key, new_value):  
+def updateWorkTask(task : WorkTask, update_key, new_value):  
     task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
     print(f"Update For ID: {task_id}")
 
 #Takes WorkTask object, deletes by id
-def deleteTask(task_id):
+def deleteWorkTask(task_id):
     collection.delete_one(task_id)
 
 

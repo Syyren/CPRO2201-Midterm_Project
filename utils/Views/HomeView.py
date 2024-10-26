@@ -1,9 +1,6 @@
 #module that establishes the "view" as we are using an application front end.
 
 import streamlit as st
-from ..Models.Task import Task
-from ..Models.PersonalTask import PersonalTask
-from ..Models.WorkTask import WorkTask
 from .ViewView import viewView
 from .CreateView import createView
 
