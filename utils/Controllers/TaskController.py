@@ -40,7 +40,7 @@ def getTaskById(id):
         cursor["description"]
     )
     db_task.setId(cursor["_id"])
-    if cursor["due_date"] != 'None':
+    if cursor["due_date"] != None and cursor["due_date"] is type(str):
         db_task.setDueDate(cursor['due_date'])
     db_task.setCreationDate(cursor["creation_date"])
     return db_task
