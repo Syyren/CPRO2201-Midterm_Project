@@ -25,8 +25,10 @@ def getAllTasks():
         task.setId(doc["_id"])
         print(f"Creation Date from Mongo: {doc["creation_date"]}")
         print('doc["due_date"]: ',doc["due_date"])
-        if doc["due_date"] is type(str) and doc["due_date"] != None:
+        if doc["due_date"] is type(str):
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
+        elif doc["due_date"] != None:
+            task.setDueDate(doc['due_date'])
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
     return list(all_tasks)
