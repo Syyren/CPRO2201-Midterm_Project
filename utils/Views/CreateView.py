@@ -10,6 +10,22 @@ from ..Controllers.PersonalTaskController import createPersonalTask
 from ..Controllers.WorkTaskController import createWorkTask
 from ..Scripts.QOL import printList
 
+#function that defines the view when create is selected, allows user to make new task
+def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
+    left_column, right_column = st.columns([2, 1])
+    
+    with right_column:
+        task_type = st.radio("Select type of task", (REG, PER, WOR))
+    
+    with left_column:
+        st.write(f"Please enter the details for your {task_type} task.")
+        if task_type == REG:
+            formGenerator(REG)
+        elif task_type == PER:
+            formGenerator(PER)
+        elif task_type == WOR:
+            formGenerator(WOR)
+
 def taskSubmitted(title : str, description : str, due_date : datetime):
     st.write(f"Task Submitted:")
     st.write(f"Title: {title}")
@@ -17,10 +33,11 @@ def taskSubmitted(title : str, description : str, due_date : datetime):
     st.write(f"Due Date: {due_date}")
 
 def formGenerator(form_name, 
-                  date_check_text = "Is there a due date?",
+                  date_check_text = "Set a date?",
                   title_txt = "Title*",
                   desc_txt = "Description",
-                  due_txt = "Due Date",
+                  due_txt = "Date",
+                  time_txt = "Time",
                   submit_txt = "Submit",
                   PER = "Personal",
                   WOR = "Work"):
@@ -33,8 +50,10 @@ def formGenerator(form_name,
         title = st.text_input(title_txt),
         description = st.text_input(desc_txt)
         due_date = None
+        due_time = None
         if date_check:
             due_date = st.date_input(due_txt)
+            due_time = st.time_input(time_txt)
         if form_name == PER:
             friends = []
             for i in range(friend_slider):
@@ -56,19 +75,3 @@ def formGenerator(form_name,
             elif form_name == WOR:
                 if len(collaborators) > 0:
                     st.write(f"Collaborators: {printList(collaborators)}")
-
-#function that defines the view when create is selected, allows user to make new task
-def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
-    left_column, right_column = st.columns([2, 1])
-    
-    with right_column:
-        task_type = st.radio("Select type of task", (REG, PER, WOR))
-    
-    with left_column:
-        st.write(f"Please enter the details for your {task_type} task.")
-        if task_type == REG:
-            formGenerator(REG)
-        elif task_type == PER:
-            formGenerator(PER)
-        elif task_type == WOR:
-            formGenerator(WOR)

@@ -1,6 +1,7 @@
 #module that returns a pop up containing an edit
 
 import streamlit as st
+from datetime import datetime
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
@@ -11,14 +12,19 @@ from ..Controllers.WorkTaskController import updateWorkTask
 @st.dialog(f"Edit Task")
 def editView(task,
              task_type : str,
-             date_check_text = "Is there a due date?",
+             date_check_text = "Set a date?",
              title_txt = "Title*",
              desc_txt = "Description",
-             due_txt = "Due Date",
+             due_txt = "Date",
+             time_txt = "Time",
              submit_txt = "Submit",
              REG = "Regular",
              PER = "Personal",
              WOR = "Work"):
+    field_date_and_time : datetime = None
+    field_date = None
+    field_time = None
+
     date_check = st.checkbox(date_check_text)
     if task_type == PER:
         friend_slider = st.slider("Friends", 0, 5, len(task.getFriends()))
@@ -29,7 +35,12 @@ def editView(task,
         description = st.text_input(desc_txt, value=task.getDescription())
         due_date = task.getDueDate()
         if date_check:
-            due_date = st.date_input(due_txt, value=task.getDueDate())
+            if task.getDueDate():
+                field_date_and_time = task.getDueDate()
+                field_date = field_date_and_time.date()
+                field_time = field_date_and_time.time()
+            due_date = st.date_input(due_txt, field_date)
+            due_time = st.time_input(time_txt, field_time)
         if task_type == PER:
             friends = []
             for i in range(friend_slider):
@@ -47,8 +58,8 @@ def editView(task,
             print(f"\"{title}\" update submitted.")
             if task_type == REG:
                 new_task = Task(title, description)
-                if due_date:
-                    new_task.setDueDate(due_date)
+                if due_date and due_time:
+                    new_task.setDueDate(datetime.combine(due_date, due_time))
                 updateTask(new_task)
             elif task_type == PER:
                 new_task = PersonalTask(title, description)
