@@ -46,9 +46,7 @@ def deleteTask(task: Task):
 def taskString(task : Task, extra_data : str = "<p></p>"):
     due_date = "<p>Due: No date assigned.</p>"
     check = task.getDueDate()
-    if isinstance(check,str):
-        due_date = f"<p>Due: {check}</p>"
-    elif check != None:
+    if check != None:
         due_date = f"<p>Due: {check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
     <div class="card">
