@@ -48,7 +48,7 @@ def formGenerator(form_name,
     elif form_name == WOR:
         collaborator_slider = st.slider("Collaborators", 0, 8, 0)
     with st.form(f"{form_name}_Form"):
-        title = st.text_input(title_txt),
+        title = st.text_input(title_txt)
         description = st.text_input(desc_txt)
         due = None
         if date_check:
@@ -72,6 +72,7 @@ def formGenerator(form_name,
             if form_name == REG:
                 task = Task(title, description)
                 if due:
+                    print("due:", due)
                     task.setDueDate(due)
                 taskSubmitted(title, description, due)
                 createTask(task)

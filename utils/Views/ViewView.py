@@ -45,7 +45,7 @@ def deleteTask(task: Task):
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
     due_date = "<p>Due: No date assigned.</p>"
-    if task.getDueDate() != None:
+    if task.getDueDate():
         due_date = f"<p>Due: {task.getDueDate().strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
     <div class="card">
@@ -61,6 +61,7 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
 #function that generates the layout before gathering the edit view
 def taskLayout(task_type : str, type_list : list):
     for task in type_list:
+        task.displayAttributes()
         edit = st.button(f"Edit {task.getTitle()}", key=f"checkbox_{hash(task.getId())}")
         if edit:
             editView(task, task_type)
