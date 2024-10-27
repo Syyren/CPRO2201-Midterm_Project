@@ -17,15 +17,11 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
     regular_tasks = getAllTasks()
     personal_tasks = getAllPersonalTasks()
     work_tasks = getAllWorkTasks()
-
-    left_column, right_column = st.columns([1, 2])
-
-    with left_column:
+    col1, col2 = st.columns([1, 2])
+    with col1:
         task_types = st.multiselect("Tasks", options=[REG, PER, WOR],)
-    
-    with right_column:
+    with col2:
         if len(task_types) > 0:
-            #clears the list after every refresh
             task_list = []
             for task_type in task_types:
                 if task_type == REG:
