@@ -23,7 +23,8 @@ def getAllTasks():
         task = Task(doc["title"],doc["description"])
         task.setId(doc["_id"])
         print(f"Creation Date from Mongo: {doc["creation_date"]}")
-        if doc["due_date"] != "None":
+        print('doc["due_date"]: ',doc["due_date"])
+        if doc["due_date"] != 'None' and doc["due_date"] != None:
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
@@ -38,7 +39,8 @@ def getTaskById(id):
         cursor["description"]
     )
     db_task.setId(cursor["_id"])
-    db_task.setDueDate(cursor['due_date'])
+    if cursor["due_date"] != 'None':
+        db_task.setDueDate(cursor['due_date'])
     db_task.setCreationDate(cursor["creation_date"])
     return db_task
      
@@ -54,9 +56,14 @@ def createTask(task : Task):
     print(f"Insert Successful! Given ID: {task_id}")
 
 
-#Takes a task object, and the key:value to be updated and updates db
-def updateTask(task : Task, update_key, new_value):  
-    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
+#Takes a task object and updates db info
+def updateTask(new_task : Task):  
+
+    task_id = collection.update_one({"_id": new_task.getId()}, 
+                                    {"$set": 
+                                        {'title' : new_task.getTitle(),
+                                         'description' : new_task.getDescription(),
+                                         'due_date':new_task.getDueDate()}})
     print(f"Update For ID: {task_id}")
 
 #Takes task object, deletes by id

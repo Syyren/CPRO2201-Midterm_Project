@@ -57,7 +57,9 @@ def editView(task,
         if submitted:
             print(f"\"{title}\" update submitted.")
             if task_type == REG:
-                new_task = Task(title, description)
+                task.setTitle(title)
+                task.setDescription(description)
+                new_task = task
                 if due_date and due_time:
                     new_task.setDueDate(datetime.combine(due_date, due_time))
                 updateTask(new_task)
