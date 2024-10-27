@@ -45,8 +45,9 @@ def deleteTask(task: Task):
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
     due_date = "<p>Due: No date assigned.</p>"
-    if task.getDueDate():
-        due_date = f"<p>Due: {task.getDueDate().strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
+    check = task.getDueDate()
+    if check:
+        due_date = f"<p>Due: {check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
     <div class="card">
         <p class="title">{task.getTitle()}</p>

@@ -24,13 +24,16 @@ def getAllTasks():
         task = Task(doc["title"],doc["description"])
         task.setId(doc["_id"])
         print(f"Creation Date from Mongo: {doc["creation_date"]}")
-        print('doc["due_date"]: ',doc["due_date"])
-        if doc["due_date"] is type(str) and doc["due_date"] != None:
+        if isinstance(doc['due_date'],datetime.datetime):
+            print("DATETIME.DATETIME DETECTED")
+            print("DELETING TASK: ",doc['title'])
+            print("PLEASE ENSURE PROPER DATATYPES")
+            deleteTask(task)
+        elif doc["due_date"] != None:
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
     return list(all_tasks)
-
 
 #retrieving task by id and returning as Task object.
 def getTaskById(id):
@@ -40,26 +43,24 @@ def getTaskById(id):
         cursor["description"]
     )
     db_task.setId(cursor["_id"])
-    if cursor["due_date"] != None and cursor["due_date"] is type(str):
+    if cursor["due_date"] != None:
         db_task.setDueDate(cursor['due_date'])
     db_task.setCreationDate(cursor["creation_date"])
     return db_task
-     
+    
 #creating task and inserting to db
 def createTask(task : Task):
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
+        "due_date" : f"{datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')}",
         "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}"
     }
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
-
 #Takes a task object and updates db info
 def updateTask(new_task : Task):  
-
     task_id = collection.update_one({"_id": new_task.getId()}, 
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
