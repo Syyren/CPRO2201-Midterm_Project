@@ -10,6 +10,10 @@ from ..Controllers.PersonalTaskController import createPersonalTask
 from ..Controllers.WorkTaskController import createWorkTask
 from ..Scripts.QOL import printList
 
+@st.dialog("Submission Successful")
+def success(task):
+    st.write(f"Task with title: {task.getTitle()} was created successfully.")
+
 #function that defines the view when create is selected, allows user to make new task
 def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
     left_column, right_column = st.columns([2, 1])
@@ -72,13 +76,21 @@ def formGenerator(form_name,
             if form_name == REG:
                 task = Task(title, description)
                 if due:
-                    print("due:", due)
                     task.setDueDate(due)
-                taskSubmitted(title, description, due)
                 createTask(task)
             elif form_name == PER:
+                task = PersonalTask(title, description)
                 if len(friends) > 0:
-                    st.write(f"Friends: {printList(friends)}")
+                    task.setFriends(friends)
+                if due:
+                    task.setDueDate(due)
+                createPersonalTask(task)
             elif form_name == WOR:
+                task = WorkTask(title, description)
                 if len(collaborators) > 0:
-                    st.write(f"Collaborators: {printList(collaborators)}")
+                    task.setCollaborators(collaborators)
+                if due:
+                    task.setDueDate(due)
+                createWorkTask(task)
+            success(task)
+            st.rerun()

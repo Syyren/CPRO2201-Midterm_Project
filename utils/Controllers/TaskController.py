@@ -29,7 +29,8 @@ def getAllTasks():
             print("DELETING TASK: ",doc['title'])
             print("PLEASE ENSURE PROPER DATATYPES")
             deleteTask(task)
-        elif doc["due_date"] != None:
+        print(doc["due_date"])
+        if doc["due_date"] != 'None':
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
@@ -43,17 +44,20 @@ def getTaskById(id):
         cursor["description"]
     )
     db_task.setId(cursor["_id"])
-    if cursor["due_date"] != None:
+    if cursor["due_date"]:
         db_task.setDueDate(cursor['due_date'])
     db_task.setCreationDate(cursor["creation_date"])
     return db_task
     
 #creating task and inserting to db
 def createTask(task : Task):
+    due_date = None
+    if task.getDueDate():
+        due_date = datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
-        "due_date" : f"{datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')}",
+        "due_date" : f"{due_date}",
         "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}"
     }
     task_id = collection.insert_one(db_task).inserted_id

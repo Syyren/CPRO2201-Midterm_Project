@@ -8,6 +8,7 @@ from ..Controllers.TaskController import getAllTasks
 from ..Controllers.PersonalTaskController import getAllPersonalTasks
 from ..Controllers.WorkTaskController import getAllWorkTasks
 from .EditView import editView
+from .DeleteView import deleteView
 from ..Scripts.QOL import applyCSS, printList
 
 #function that defines the view when view task is selected, allows user to view and delete their tasks
@@ -39,9 +40,6 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
         else:
             st.write("Please select the type of tasks you'd like to view.")
 
-def deleteTask(task: Task):
-    st.write(f"Are you sure you would like to delete \"{task.getTitle()}\"?")
-
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
     due_date = "<p>Due: No date assigned.</p>"
@@ -63,11 +61,16 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
 def taskLayout(task_type : str, type_list : list):
     for task in type_list:
         task.displayAttributes()
-        edit = st.button(f"Edit {task.getTitle()}", key=f"checkbox_{hash(task.getId())}")
-        if edit:
-            editView(task, task_type)
         taskDisplay(task, task_type)
-        print(f"{task_type} task pulled: {task.getTitle()}")
+        col1, col2 = st.columns([1,1])
+        with col1:
+            edit = st.button(f"Edit {task.getTitle()}", key=f"edit_{hash(task.getId())}")
+            if edit:
+                editView(task, task_type)
+        with col2:
+            delete = st.button(f"Delete {task.getTitle()}", key=f"delete_{hash(task.getId())}")
+            if delete:
+                deleteView(task, task_type)
 
 #function that writes details for a task
 def taskDisplay(task : Task, task_type : str):

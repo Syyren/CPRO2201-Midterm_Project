@@ -9,6 +9,7 @@ from ..Controllers.TaskController import updateTask
 from ..Controllers.PersonalTaskController import updatePersonalTask
 from ..Controllers.WorkTaskController import updateWorkTask
 
+#pop up window that allows the user to edit an existing task via its form
 @st.dialog(f"Edit Task")
 def editView(task,
              task_type : str,
@@ -70,5 +71,9 @@ def editView(task,
                 if len(friends) > 0:
                     new_task.setFriends(friends)
             elif task_type == WOR:
-                pass
+                new_task = WorkTask(title, description)
+                if due_date:
+                    new_task.setDueDate(due_date)
+                if len(collaborators) > 0:
+                    new_task.setCollaborators(collaborators)
             st.rerun()
