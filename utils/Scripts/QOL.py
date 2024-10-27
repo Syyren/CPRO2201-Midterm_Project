@@ -11,12 +11,6 @@ def applyCSS():
         css = stylesheet.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-#function that makes a cancel button
-def cancelButton(task : Task):
-    cancel = st.button(f"Cancel", key=f"cancel_{hash(task.getId())}")
-    if cancel:
-        return False
-
 #function that prints a list in a nice readable way
 def printList(list : list):
     string = ""
