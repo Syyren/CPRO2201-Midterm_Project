@@ -13,6 +13,9 @@ from ..Scripts.QOL import printList
 @st.dialog("Submission Successful")
 def success(task):
     st.write(f"Task with title: {task.getTitle()} was created successfully.")
+    btn = st.button("OK", )
+    if btn:
+        st.rerun()
 
 #function that defines the view when create is selected, allows user to make new task
 def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
@@ -93,4 +96,3 @@ def formGenerator(form_name,
                     task.setDueDate(due)
                 createWorkTask(task)
             success(task)
-            st.rerun()
