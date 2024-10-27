@@ -22,19 +22,19 @@ due date: {self.getDueDate()}''')
     def getId(self):
         return self.id
     
-    def setId(self, id):
+    def setId(self, id : str):
         self.id = id
 
     def getTitle(self):
         return self._title
     
-    def setTitle(self, title):
+    def setTitle(self, title : str):
         self._title = title
     
     def getDescription(self):
         return self._description
     
-    def setDescription(self, description):
+    def setDescription(self, description : str):
         self._description = description
     
     def getDueDate(self):

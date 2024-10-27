@@ -14,7 +14,7 @@ class PersonalTask(Task):
     def getFriends(self):
         return self._friends
     
-    def setFriends(self, friends):
+    def setFriends(self, friends : list):
         if len(friends) > 0:
             for friend in friends:
                 self._friends.append(friend)

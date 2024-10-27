@@ -28,7 +28,7 @@ collaborators: {self.getCollaborators()}''')
     def getCollaborators(self):
         return self._collaborators
     
-    def setCollaborators(self, collaborators):
+    def setCollaborators(self, collaborators : list):
         if len(collaborators) > 0:
             for collaborator in collaborators:
                 self._collaborators.append(collaborator)

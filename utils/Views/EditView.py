@@ -1,8 +1,14 @@
+#module that returns a pop up containing an edit
+
 import streamlit as st
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
+from ..Controllers.TaskController import updateTask
+from ..Controllers.PersonalTaskController import updatePersonalTask
+from ..Controllers.WorkTaskController import updateWorkTask
 
+@st.dialog(f"Edit Task")
 def editView(task,
              task_type : str,
              date_check_text = "Is there a due date?",
@@ -10,6 +16,7 @@ def editView(task,
              desc_txt = "Description",
              due_txt = "Due Date",
              submit_txt = "Submit",
+             REG = "Regular",
              PER = "Personal",
              WOR = "Work"):
     date_check = st.checkbox(date_check_text)
@@ -37,4 +44,18 @@ def editView(task,
                     collaborators.append(collaborator_name)
         submitted = st.form_submit_button(submit_txt)
         if submitted:
-            st.write(f"\"{title}\" update submitted.")
+            print(f"\"{title}\" update submitted.")
+            if task_type == REG:
+                new_task = Task(title, description)
+                if due_date:
+                    new_task.setDueDate(due_date)
+                updateTask(new_task)
+            elif task_type == PER:
+                new_task = PersonalTask(title, description)
+                if due_date:
+                    new_task.setDueDate(due_date)
+                if len(friends) > 0:
+                    new_task.setFriends(friends)
+            elif task_type == WOR:
+                pass
+            st.rerun()

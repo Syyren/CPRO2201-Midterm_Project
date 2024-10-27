@@ -1,7 +1,6 @@
 #file for scripts that do convenient things
 
 import streamlit as st
-from ..Views.EditView import editView
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
@@ -10,9 +9,9 @@ from ..Models.WorkTask import WorkTask
 def applyCSS():
     with open("utils/Views/ViewViewStyle.css") as stylesheet:
         css = stylesheet.read()
-
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
+#function that makes a cancel button
 def cancelButton(task : Task):
     cancel = st.button(f"Cancel", key=f"cancel_{hash(task.getId())}")
     if cancel:

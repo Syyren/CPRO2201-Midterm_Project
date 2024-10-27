@@ -8,7 +8,7 @@ from ..Controllers.TaskController import getAllTasks
 from ..Controllers.PersonalTaskController import getAllPersonalTasks
 from ..Controllers.WorkTaskController import getAllWorkTasks
 from .EditView import editView
-from ..Scripts.QOL import applyCSS, cancelButton, printList
+from ..Scripts.QOL import applyCSS, printList
 
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
@@ -58,18 +58,14 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
     '''
     return string
 
+#function that generates the layout before gathering the edit view
 def taskLayout(task_type : str, type_list : list):
     for task in type_list:
-        col1, col2 = st.columns([1,1])
-        with col1:
-            edit = st.button(f"Edit {task.getTitle()}", key=f"checkbox_{hash(task.getId())}")
+        edit = st.button(f"Edit {task.getTitle()}", key=f"checkbox_{hash(task.getId())}")
         if edit:
-            with col2:
-                edit = cancelButton(task)
             editView(task, task_type)
-        else:
-            taskDisplay(task, task_type)
-            print(f"{task_type} task pulled: {task.getTitle()}")
+        taskDisplay(task, task_type)
+        print(f"{task_type} task pulled: {task.getTitle()}")
 
 #function that writes details for a task
 def taskDisplay(task : Task, task_type : str):

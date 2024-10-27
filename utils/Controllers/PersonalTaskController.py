@@ -52,12 +52,12 @@ def createPersonalTask(task : PersonalTask):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a personal task object, and the key:value to be updated and updates db
-def updateTask(task : PersonalTask, update_key, new_value):  
+def updatePersonalTask(task : PersonalTask, update_key, new_value):  
     task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
     print(f"Update For ID: {task_id}")
 
 #Takes personal task object, deletes by id
-def deleteTask(task : PersonalTask):
+def deletePersonalTask(task : PersonalTask):
     collection.delete_one({"_id":task.getId()})
 
 #sending a ping to confirm successful connection
