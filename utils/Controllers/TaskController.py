@@ -13,7 +13,8 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
 collection = db[f"Regular_Tasks"]
 
-
+#STRPTIME makes a datetime Obj from string in specified format
+#STRFTIME makes a string from datetime obj into the specified format
 
 #retreiving all tasks in collection as cursor, then convert to list of Tasks
 def getAllTasks():
@@ -24,7 +25,7 @@ def getAllTasks():
         task.setId(doc["_id"])
         print(f"Creation Date from Mongo: {doc["creation_date"]}")
         print('doc["due_date"]: ',doc["due_date"])
-        if doc["due_date"] != 'None' and doc["due_date"] != None:
+        if doc["due_date"] is type(str) and doc["due_date"] != None:
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
