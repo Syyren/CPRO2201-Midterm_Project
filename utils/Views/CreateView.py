@@ -39,6 +39,7 @@ def formGenerator(form_name,
                   due_txt = "Date",
                   time_txt = "Time",
                   submit_txt = "Submit",
+                  REG = "Regular",
                   PER = "Personal",
                   WOR = "Work"):
     date_check = st.checkbox(date_check_text)
@@ -49,11 +50,11 @@ def formGenerator(form_name,
     with st.form(f"{form_name}_Form"):
         title = st.text_input(title_txt),
         description = st.text_input(desc_txt)
-        due_date = None
-        due_time = None
+        due = None
         if date_check:
             due_date = st.date_input(due_txt)
             due_time = st.time_input(time_txt)
+            due = datetime.datetime.combine(due_date, due_time)
         if form_name == PER:
             friends = []
             for i in range(friend_slider):
@@ -68,8 +69,13 @@ def formGenerator(form_name,
                     collaborators.append(collaborator_name)
         submitted = st.form_submit_button(submit_txt)
         if submitted:
-            taskSubmitted(title, description, due_date)
-            if form_name == PER:
+            if form_name == REG:
+                task = Task(title, description)
+                if due:
+                    task.setDueDate(due)
+                taskSubmitted(title, description, due)
+                createTask(task)
+            elif form_name == PER:
                 if len(friends) > 0:
                     st.write(f"Friends: {printList(friends)}")
             elif form_name == WOR:
