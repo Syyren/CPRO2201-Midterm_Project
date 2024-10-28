@@ -23,32 +23,11 @@ def getAllTasks():
     for doc in cursor:
         task = Task(doc["title"],doc["description"])
         task.setId(doc["_id"])
-        print(f"Creation Date from Mongo: {doc["creation_date"]}")
-        if isinstance(doc['due_date'],datetime.datetime):
-            print("DATETIME.DATETIME DETECTED")
-            print("DELETING TASK: ",doc['title'])
-            print("PLEASE ENSURE PROPER DATATYPES")
-            deleteTask(task)
-            continue
-        print(doc["due_date"])
         if doc["due_date"] != 'None':
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
     return list(all_tasks)
-
-#retrieving task by id and returning as Task object.
-def getTaskById(id):
-    cursor = collection.find_one({"_id":id})
-    db_task = Task(
-        cursor["title"],
-        cursor["description"]
-    )
-    db_task.setId(cursor["_id"])
-    if cursor["due_date"]:
-        db_task.setDueDate(cursor['due_date'])
-    db_task.setCreationDate(cursor["creation_date"])
-    return db_task
     
 #creating task and inserting to db
 def createTask(task : Task):
