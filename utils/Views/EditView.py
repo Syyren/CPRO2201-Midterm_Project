@@ -76,10 +76,13 @@ def editView(task,
                     new_task.setDueDate(due_date)
                 if len(friends) > 0:
                     new_task.setFriends(friends)
+                updatePersonalTask(new_task)
             elif task_type == WOR:
                 new_task = WorkTask(title, description)
                 if due_date:
                     new_task.setDueDate(due_date)
                 if len(collaborators) > 0:
                     new_task.setCollaborators(collaborators)
+                new_task.setLengthWithValues(len_hour, len_mins)
+                updateWorkTask(new_task)
             st.rerun()
