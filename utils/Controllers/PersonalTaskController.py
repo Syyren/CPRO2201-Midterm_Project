@@ -26,25 +26,15 @@ def getAllPersonalTasks():
         all_tasks.append(task)
     return list(all_tasks)
 
-#retrieving task by id and returning as PersonalTask object.
-def getPersonalTaskById(id):
-    cursor = collection.find_one({"_id":id})
-    db_task = PersonalTask(
-        cursor["title"],
-        cursor["description"],
-        cursor["friends"]
-    )
-    db_task.setId(cursor["_id"])
-    db_task.setDueDate(cursor['due_date'])
-    db_task.setCreationDate(cursor["creation_date"])
-    return db_task
-
 #creating personal task and inserting to db
 def createPersonalTask(task : PersonalTask):
+    due_date = None
+    if task.getDueDate():
+        due_date = datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
+        "due_date" : f"{due_date}",
         "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}",
         "friends" : f"{task.getFriends()}"
     }
@@ -52,8 +42,18 @@ def createPersonalTask(task : PersonalTask):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a personal task object, and the key:value to be updated and updates db
-def updatePersonalTask(task : PersonalTask, update_key, new_value):  
-    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
+def updatePersonalTask(new_task : PersonalTask):
+    due_date = new_task.getDueDate()
+    if due_date:
+        due_date = datetime.datetime.strftime(new_task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
+    task_id = collection.update_one({"_id": new_task.getId()}, 
+                                    {"$set": 
+                                        {'title' : new_task.getTitle(),
+                                         'description' : new_task.getDescription(),
+                                         'due_date':f"{due_date}",
+                                         "friends" : f"{new_task.getFriends()}"
+                                        }
+                                    })
     print(f"Update For ID: {task_id}")
 
 #Takes personal task object, deletes by id
