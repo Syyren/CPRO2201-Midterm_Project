@@ -33,12 +33,6 @@ def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"
         elif task_type == WOR:
             formGenerator(WOR)
 
-def taskSubmitted(title : str, description : str, due_date : datetime):
-    st.write(f"Task Submitted:")
-    st.write(f"Title: {title}")
-    st.write(f"Description: {description}")
-    st.write(f"Due Date: {due_date}")
-
 def formGenerator(form_name, 
                   date_check_text = "Set a date?",
                   title_txt = "Title*",
@@ -78,7 +72,10 @@ def formGenerator(form_name,
             len_mins = st.slider("Minutes", 0, 60, 0)
         submitted = st.form_submit_button(submit_txt)
         if submitted:
-            if form_name == REG:
+            if title == "":
+                st.error("Title can't be blank!")
+                return
+            elif form_name == REG:
                 task = Task(title, description)
                 if due:
                     task.setDueDate(due)

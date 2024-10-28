@@ -59,7 +59,10 @@ def editView(task,
         submitted = st.form_submit_button(submit_txt)
         if submitted:
             print(f"\"{title}\" update submitted.")
-            if task_type == REG:
+            if title == "":
+                st.error("Title can't be blank!")
+                return
+            elif task_type == REG:
                 task.setTitle(title)
                 task.setDescription(description)
                 new_task = task
@@ -73,10 +76,13 @@ def editView(task,
                     new_task.setDueDate(due_date)
                 if len(friends) > 0:
                     new_task.setFriends(friends)
+                updatePersonalTask(new_task)
             elif task_type == WOR:
                 new_task = WorkTask(title, description)
                 if due_date:
                     new_task.setDueDate(due_date)
                 if len(collaborators) > 0:
                     new_task.setCollaborators(collaborators)
+                new_task.setLengthWithValues(len_hour, len_mins)
+                updateWorkTask(new_task)
             st.rerun()
