@@ -29,6 +29,7 @@ def getAllTasks():
             print("DELETING TASK: ",doc['title'])
             print("PLEASE ENSURE PROPER DATATYPES")
             deleteTask(task)
+            continue
         print(doc["due_date"])
         if doc["due_date"] != 'None':
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
@@ -64,12 +65,15 @@ def createTask(task : Task):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a task object and updates db info
-def updateTask(new_task : Task):  
+def updateTask(new_task : Task):
+    due_date = new_task.getDueDate()
+    if due_date:
+        due_date = datetime.datetime.strftime(new_task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     task_id = collection.update_one({"_id": new_task.getId()}, 
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
                                          'description' : new_task.getDescription(),
-                                         'due_date':new_task.getDueDate()}})
+                                         'due_date':f"{due_date}"}})
     print(f"Update For ID: {task_id}")
 
 #Takes task object, deletes by id
