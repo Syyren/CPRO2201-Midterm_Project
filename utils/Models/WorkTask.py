@@ -37,9 +37,7 @@ collaborators: {self.getCollaborators()}''')
         return self._collaborators
     
     def setCollaborators(self, collaborators : list):
-        if len(collaborators) > 0:
-            for collaborator in collaborators:
-                self._collaborators.append(collaborator)
+        self._collaborators = collaborators
 
 #just testing
 if __name__ == "__main__":

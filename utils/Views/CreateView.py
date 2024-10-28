@@ -34,7 +34,7 @@ def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"
             formGenerator(WOR)
 
 def formGenerator(form_name, 
-                  date_check_text = "Set a date?",
+                  date_check_text = "Set a due date?",
                   title_txt = "Title*",
                   desc_txt = "Description",
                   due_txt = "Date",

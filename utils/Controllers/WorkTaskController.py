@@ -61,6 +61,6 @@ def deleteWorkTask(task : WorkTask):
 #sending a ping to confirm successful connection
 try:
     client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
+    print("Work Task Controler: pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)

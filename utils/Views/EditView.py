@@ -13,7 +13,7 @@ from ..Controllers.WorkTaskController import updateWorkTask
 @st.dialog(f"Edit Task")
 def editView(task,
              task_type : str,
-             date_check_text = "Set a date?",
+             date_check_text = "Set a due date?",
              title_txt = "Title*",
              desc_txt = "Description",
              due_txt = "Date",
