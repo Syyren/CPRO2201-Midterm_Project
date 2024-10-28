@@ -54,6 +54,8 @@ def editView(task,
                 collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name", task.getCollaborators()[i])
                 if collaborator_name:
                     collaborators.append(collaborator_name)
+            len_hour = st.slider("Hours", 0, 12, task.getLengthHrs())
+            len_mins = st.slider("Minutes", 0, 60, task.getLengthMins())
         submitted = st.form_submit_button(submit_txt)
         if submitted:
             print(f"\"{title}\" update submitted.")
@@ -64,8 +66,6 @@ def editView(task,
                 if date_check:
                     if due_date and due_time:
                         new_task.setDueDate(datetime.combine(due_date, due_time))
-                # else: #This removes the due date if the "Set Date?" checkbox remains unchecked at edit
-                #     new_task.setDueDate(None) 
                 updateTask(new_task)
             elif task_type == PER:
                 new_task = PersonalTask(title, description)
