@@ -12,9 +12,6 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Tasks"]
 collection = db[f"Regular_Tasks"]
 
-#STRPTIME makes a datetime Obj from string in specified format
-#STRFTIME makes a string from datetime obj into the specified format
-
 #retreiving all tasks in collection as cursor, then convert to list of Tasks
 def getAllTasks():
     cursor = collection.find({})
@@ -39,7 +36,7 @@ def createTask(task : Task):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a task object and updates db info
-def updateTask(new_task : Task):
+def updateTask(new_task : Task): 
     task_id = collection.update_one({"_id": new_task.getId()}, 
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
