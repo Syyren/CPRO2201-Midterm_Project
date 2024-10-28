@@ -33,12 +33,6 @@ def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"
         elif task_type == WOR:
             formGenerator(WOR)
 
-def taskSubmitted(title : str, description : str, due_date : datetime):
-    st.write(f"Task Submitted:")
-    st.write(f"Title: {title}")
-    st.write(f"Description: {description}")
-    st.write(f"Due Date: {due_date}")
-
 def formGenerator(form_name, 
                   date_check_text = "Set a date?",
                   title_txt = "Title*",
