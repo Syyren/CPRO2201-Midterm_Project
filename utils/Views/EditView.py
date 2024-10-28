@@ -74,7 +74,6 @@ def editView(task,
                 new_task = PersonalTask(title, description)
                 if due_date:
                     new_task.setDueDate(due_date)
-                print(f"friends {friends}")
                 if len(friends) > 0:
                     new_task.setFriends(friends)
                 else:
