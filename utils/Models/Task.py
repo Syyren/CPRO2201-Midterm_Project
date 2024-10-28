@@ -25,10 +25,10 @@ due date: {self.getDueDate()}''')
         
     #getters and setters for all relevant attributes, creation date has no setter as that's automatic and (inteded to be) immutable
     def getId(self):
-        return self.id
+        return self._id
     
     def setId(self, id : str):
-        self.id = id
+        self._id = id
 
     def getTitle(self):
         return self._title
