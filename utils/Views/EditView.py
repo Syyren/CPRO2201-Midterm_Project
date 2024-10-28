@@ -59,7 +59,10 @@ def editView(task,
         submitted = st.form_submit_button(submit_txt)
         if submitted:
             print(f"\"{title}\" update submitted.")
-            if task_type == REG:
+            if title == "":
+                st.error("Title can't be blank!")
+                return
+            elif task_type == REG:
                 task.setTitle(title)
                 task.setDescription(description)
                 new_task = task

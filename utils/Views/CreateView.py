@@ -72,7 +72,10 @@ def formGenerator(form_name,
             len_mins = st.slider("Minutes", 0, 60, 0)
         submitted = st.form_submit_button(submit_txt)
         if submitted:
-            if form_name == REG:
+            if title == "":
+                st.error("Title can't be blank!")
+                return
+            elif form_name == REG:
                 task = Task(title, description)
                 if due:
                     task.setDueDate(due)
