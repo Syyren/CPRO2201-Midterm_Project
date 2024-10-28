@@ -63,26 +63,31 @@ def editView(task,
                 st.error("Title can't be blank!")
                 return
             elif task_type == REG:
-                task.setTitle(title)
-                task.setDescription(description)
-                new_task = task
+                new_task = Task(title, description)
+                new_task.setId(task.getId())
                 if date_check:
                     if due_date and due_time:
-                        new_task.setDueDate(datetime.combine(due_date, due_time))
+                        task.setDueDate(datetime.combine(due_date, due_time))
                 updateTask(new_task)
             elif task_type == PER:
                 new_task = PersonalTask(title, description)
+                new_task.setId(task.getId())
                 if due_date:
                     new_task.setDueDate(due_date)
                 if len(friends) > 0:
                     new_task.setFriends(friends)
+                else:
+                    new_task.setFriends([])
                 updatePersonalTask(new_task)
             elif task_type == WOR:
                 new_task = WorkTask(title, description)
+                new_task.setId(task.getId())
                 if due_date:
                     new_task.setDueDate(due_date)
                 if len(collaborators) > 0:
                     new_task.setCollaborators(collaborators)
+                else:
+                    new_task.setCollaborators([])
                 new_task.setLengthWithValues(len_hour, len_mins)
                 updateWorkTask(new_task)
             st.rerun()
