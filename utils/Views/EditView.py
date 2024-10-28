@@ -45,13 +45,19 @@ def editView(task,
         if task_type == PER:
             friends = []
             for i in range(friend_slider):
-                friend_name = st.text_input(f"Friend {i + 1}'s Name", task.getFriends()[i])
+                if i + 1 <= len(task.getFriends):
+                    friend_name = st.text_input(f"Friend {i + 1}'s Name", task.getFriends()[i])
+                else:
+                    friend_name = st.text_input(f"Friend {i + 1}'s Name")
                 if friend_name:
                     friends.append(friend_name)
         elif task_type == WOR:
             collaborators = []
             for i in range(collaborator_slider):
-                collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name", task.getCollaborators()[i])
+                if i + 1 <= len(task.getCollaborators()):
+                    collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name", task.getCollaborators()[i])
+                else:
+                    collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name")
                 if collaborator_name:
                     collaborators.append(collaborator_name)
             len_hour = st.slider("Hours", 0, 12, task.getLengthHrs())
