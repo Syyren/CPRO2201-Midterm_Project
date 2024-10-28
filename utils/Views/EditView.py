@@ -61,8 +61,11 @@ def editView(task,
                 task.setTitle(title)
                 task.setDescription(description)
                 new_task = task
-                if due_date and due_time:
-                    new_task.setDueDate(datetime.datetime.combine(due_date, due_time))
+                if date_check:
+                    if due_date and due_time:
+                        new_task.setDueDate(datetime.combine(due_date, due_time))
+                # else: #This removes the due date if the "Set Date?" checkbox remains unchecked at edit
+                #     new_task.setDueDate(None) 
                 updateTask(new_task)
             elif task_type == PER:
                 new_task = PersonalTask(title, description)

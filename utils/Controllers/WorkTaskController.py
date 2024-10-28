@@ -23,35 +23,22 @@ def getAllWorkTasks():
     for doc in cursor:
         task = WorkTask(doc["title"],doc["description"], doc["collaborators"])
         task.setId(doc["_id"])
-        task.setDueDate(doc['due_date'])
-        task.setCreationDate(doc["creation_date"])
+        if doc["due_date"] != 'None':
+            task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
+        task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setLength(doc['length'])
         all_tasks.append(task)
     return list(all_tasks)
-
-
-
-#retrieving task by id and returning as WorkTask object.
-def getWorkTaskById(id):
-    cursor = collection.find_one({"_id":id})
-    db_task = WorkTask(
-        cursor["title"],
-        cursor["description"],
-        cursor['collaborators']
-    )
-    db_task.setId(cursor["_id"])
-    if cursor["due_date"] != "None":
-        db_task.setDueDate(datetime.datetime.strptime(cursor['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
-    db_task.setCreationDate(datetime.datetime.strptime(cursor['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
-    db_task.setLength(cursor['length'])
-    return db_task
      
 #creating WorkTask and inserting to db
 def createWorkTask(task : WorkTask):
+    due_date = None
+    if task.getDueDate():
+        due_date = datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     db_task = {
         "title" : f"{task.getTitle()}",
         "description" : f"{task.getDescription()}",
-        "due_date" : f"{task.getDueDate()}",
+        "due_date" : f"{due_date}",
         "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}",
         "length" : f"{task.getLength()}",
         "collaborators" : f"{task.getCollaborators()}"
@@ -60,14 +47,22 @@ def createWorkTask(task : WorkTask):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a WorkTask object, and the key:value to be updated and updates db
-def updateWorkTask(task : WorkTask, update_key, new_value):  
-    task_id = collection.update_one({"_id": task.getId()}, {"$set": {update_key : new_value}})
+def updateWorkTask(new_task : WorkTask):
+    due_date = new_task.getDueDate()
+    if due_date:
+        due_date = datetime.datetime.strftime(new_task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
+    task_id = collection.update_one({"_id": new_task.getId()}, 
+                                    {"$set": 
+                                        {'title' : new_task.getTitle(),
+                                         'description' : new_task.getDescription(),
+                                         'due_date':due_date,
+                                         "length" : new_task.getLength(),
+                                         "collaborators" : new_task.getCollaborators()}})
     print(f"Update For ID: {task_id}")
 
 #Takes WorkTask object, deletes by id
-def deleteWorkTask(task_id):
-    collection.delete_one(task_id)
-
+def deleteWorkTask(task : WorkTask):
+    collection.delete_one({"_id":task.getId()})
 
 #sending a ping to confirm successful connection
 try:

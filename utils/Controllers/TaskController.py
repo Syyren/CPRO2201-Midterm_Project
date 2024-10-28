@@ -23,31 +23,11 @@ def getAllTasks():
     for doc in cursor:
         task = Task(doc["title"],doc["description"])
         task.setId(doc["_id"])
-        print(f"Creation Date from Mongo: {doc["creation_date"]}")
-        if isinstance(doc['due_date'],datetime.datetime):
-            print("DATETIME.DATETIME DETECTED")
-            print("DELETING TASK: ",doc['title'])
-            print("PLEASE ENSURE PROPER DATATYPES")
-            deleteTask(task)
-        print(doc["due_date"])
         if doc["due_date"] != 'None':
             task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
         task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
         all_tasks.append(task)
     return list(all_tasks)
-
-#retrieving task by id and returning as Task object.
-def getTaskById(id):
-    cursor = collection.find_one({"_id":id})
-    db_task = Task(
-        cursor["title"],
-        cursor["description"]
-    )
-    db_task.setId(cursor["_id"])
-    if cursor["due_date"]:
-        db_task.setDueDate(cursor['due_date'])
-    db_task.setCreationDate(cursor["creation_date"])
-    return db_task
     
 #creating task and inserting to db
 def createTask(task : Task):
@@ -64,12 +44,15 @@ def createTask(task : Task):
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a task object and updates db info
-def updateTask(new_task : Task):  
+def updateTask(new_task : Task):
+    due_date = new_task.getDueDate()
+    if due_date:
+        due_date = datetime.datetime.strftime(new_task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     task_id = collection.update_one({"_id": new_task.getId()}, 
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
                                          'description' : new_task.getDescription(),
-                                         'due_date':new_task.getDueDate()}})
+                                         'due_date':f"{due_date}"}})
     print(f"Update For ID: {task_id}")
 
 #Takes task object, deletes by id
