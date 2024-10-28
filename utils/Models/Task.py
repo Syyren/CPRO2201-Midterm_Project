@@ -6,11 +6,12 @@ class Task():
     #constructor, takes a title and description string, sets a default due date and creation time
     def __init__(self, title : str, description : str = None):
         self._id = "temp_id"
-        if title.strip() == '':
+        if title.strip() == "":
             title = "Untitled Task"
         self._title = title
-        if description.strip() == '':
-            description = "No Description"
+        if description:
+            if description.strip() == "":
+                description = None
         self._description = description
         self._due_date : datetime = None
         self.__creation_date: datetime = datetime.datetime.now()

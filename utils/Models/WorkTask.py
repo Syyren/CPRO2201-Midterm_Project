@@ -16,14 +16,22 @@ collaborators: {self.getCollaborators()}''')
     def getLength(self):
         return self._length
 
-    def setLength(self, length_hours: int, length_mins: int):
+    def setLengthWithValues(self, length_hrs: int, length_mins: int):
         if length_mins < 60:
-            self._length = f"{length_hours}:{length_mins}"
+            self._length = f"{length_hrs}:{length_mins}"
         else:
             self._length = None
 
     def setLength(self, length: str):
         self._length = length
+
+    def getLengthMins(self):
+        mins = int(self.getLength().split(":")[1])
+        return mins
+    
+    def getLengthHrs(self):
+        hrs = int(self.getLength().split(":")[0])
+        return hrs
 
     def getCollaborators(self):
         return self._collaborators
@@ -36,6 +44,7 @@ collaborators: {self.getCollaborators()}''')
 #just testing
 if __name__ == "__main__":
     test_work_task = WorkTask("Meeting")
-    test_work_task.setDueDate(2024, 10, 30, 3, 0)
-    test_work_task.setLength(2, 30)
+    test_work_task.setLengthWithValues(2, 30)
     test_work_task.displayAttributes()
+    print("Hrs: ",test_work_task.getLengthHrs())
+    print("Mins: ",test_work_task.getLengthMins())

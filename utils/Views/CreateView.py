@@ -11,8 +11,8 @@ from ..Controllers.WorkTaskController import createWorkTask
 from ..Scripts.QOL import printList
 
 @st.dialog("Submission Successful")
-def success(task):
-    st.write(f"Task with title: {task.getTitle()} was created successfully.")
+def success(task_title : str):
+    st.write(f"Task with title: {task_title} was created successfully.")
     btn = st.button("OK", )
     if btn:
         st.rerun()
@@ -74,6 +74,8 @@ def formGenerator(form_name,
                 collaborator_name = st.text_input(f"Collaborator {i + 1}'s Name")
                 if collaborator_name:
                     collaborators.append(collaborator_name)
+            len_hour = st.slider("Hours", 0, 12, 0)
+            len_mins = st.slider("Minutes", 0, 60, 0)
         submitted = st.form_submit_button(submit_txt)
         if submitted:
             if form_name == REG:
@@ -94,5 +96,6 @@ def formGenerator(form_name,
                     task.setCollaborators(collaborators)
                 if due:
                     task.setDueDate(due)
+                task.setLengthWithValues(len_hour, len_mins)
                 createWorkTask(task)
-            success(task)
+            success(task.getTitle())
