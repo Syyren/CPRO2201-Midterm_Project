@@ -81,10 +81,16 @@ def taskDisplay(task : Task, task_type : str):
             friends = f"<p>With: {printList(task.getFriends())}</p>"
         st.markdown(taskString(task, friends), unsafe_allow_html=True)
     elif task_type == WOR:
-        collaborators = ""
+        extra_data = ""
         if len(task.getCollaborators()) > 0:
-                collaborators = f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
-        st.markdown(taskString(task, collaborators), unsafe_allow_html=True)
+                extra_data = f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
+        if task.getLengthMins() > 0 and task.getLengthHrs() > 0:
+            extra_data += f"<p>Length: {task.getLengthHrs()} hours and {task.getLengthMins()} minutes.</p>"
+        elif task.getLengthMins() > 0:
+            extra_data += f"<p>Length: {task.getLengthMins()} minutes.</p>"
+        elif task.getLengthHrs() > 0:
+            extra_data += f"<p>Length: {task.getLengthHrs()} hours.</p>"
+        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
 
 #function that checks a list and then prints the tasks accordingly
 def taskPrint(type_list : list):
