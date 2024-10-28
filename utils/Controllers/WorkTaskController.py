@@ -1,5 +1,4 @@
 import os
-import datetime
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -23,41 +22,36 @@ def getAllWorkTasks():
     for doc in cursor:
         task = WorkTask(doc["title"],doc["description"], doc["collaborators"])
         task.setId(doc["_id"])
-        if doc["due_date"] != 'None':
-            task.setDueDate(datetime.datetime.strptime(doc['due_date'], '%Y-%m-%d %H:%M:%S.%f'))
-        task.setCreationDate(datetime.datetime.strptime(doc['creation_date'], '%Y-%m-%d %H:%M:%S.%f'))
+        task.setDueDate(doc['due_date'])
+        task.setCreationDate(doc['creation_date'])
         task.setLength(doc['length'])
         all_tasks.append(task)
     return list(all_tasks)
      
 #creating WorkTask and inserting to db
 def createWorkTask(task : WorkTask):
-    due_date = None
-    if task.getDueDate():
-        due_date = datetime.datetime.strftime(task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     db_task = {
-        "title" : f"{task.getTitle()}",
-        "description" : f"{task.getDescription()}",
-        "due_date" : f"{due_date}",
-        "creation_date" : f"{datetime.datetime.strftime(task.getCreationDate(),'%Y-%m-%d %H:%M:%S.%f')}",
-        "length" : f"{task.getLength()}",
-        "collaborators" : f"{task.getCollaborators()}"
+        "title" : task.getTitle(),
+        "description" : task.getDescription(),
+        "due_date" : task.getDueDate(),
+        "creation_date" : task.getCreationDate(),
+        "length" : task.getLength(),
+        "collaborators" : task.getCollaborators()
     }
     task_id = collection.insert_one(db_task).inserted_id
     print(f"Insert Successful! Given ID: {task_id}")
 
 #Takes a WorkTask object, and the key:value to be updated and updates db
 def updateWorkTask(new_task : WorkTask):
-    due_date = new_task.getDueDate()
-    if due_date:
-        due_date = datetime.datetime.strftime(new_task.getDueDate(),'%Y-%m-%d %H:%M:%S.%f')
     task_id = collection.update_one({"_id": new_task.getId()}, 
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
                                          'description' : new_task.getDescription(),
-                                         'due_date':due_date,
+                                         'due_date':new_task.getDueDate(),
                                          "length" : new_task.getLength(),
-                                         "collaborators" : new_task.getCollaborators()}})
+                                         "collaborators" : new_task.getCollaborators()
+                                        }
+                                    })
     print(f"Update For ID: {task_id}")
 
 #Takes WorkTask object, deletes by id
