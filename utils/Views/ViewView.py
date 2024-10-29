@@ -13,14 +13,18 @@ from ..Scripts.QOL import applyCSS, printList
 
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
+    #applying the css and creating various lists based on the tasks
     applyCSS()
     regular_tasks = getAllTasks()
     personal_tasks = getAllPersonalTasks()
     work_tasks = getAllWorkTasks()
+    #for layout
     col1, col2 = st.columns([1, 2])
     with col1:
+        #selects the task type
         task_types = st.multiselect("Tasks", options=[REG, PER, WOR],)
     with col2:
+        #generates the list of tasks or prints a select prompt
         if len(task_types) > 0:
             task_list = []
             for task_type in task_types:
@@ -30,7 +34,7 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
                     task_list.append(personal_tasks)
                 elif task_type == WOR:
                     task_list.append(work_tasks)
-            st.write(f"Viewing details for your {printList(task_types)} tasks.")
+            st.write(f"Viewing details for your \"{printList(task_types)}\" tasks.")
             for type_list in task_list:
                 taskPrint(type_list)
         else:
@@ -60,19 +64,20 @@ def taskLayout(task_type : str, type_list : list):
         taskDisplay(task, task_type)
         col1, col2 = st.columns([1,1])
         with col1:
-            edit = st.button(f"Edit {task.getTitle()}", key=f"edit_{hash(task.getId())}")
+            edit = st.button(f"Edit \"{task.getTitle()}", key=f"edit_{hash(task.getId())}\"")
             if edit:
                 editView(task, task_type)
         with col2:
-            delete = st.button(f"Delete {task.getTitle()}", key=f"delete_{hash(task.getId())}")
+            delete = st.button(f"Delete \"{task.getTitle()}", key=f"delete_{hash(task.getId())}\"")
             if delete:
                 deleteView(task, task_type)
 
 #function that writes details for a task
-def taskDisplay(task : Task, task_type : str):
-    REG = "Regular"
-    PER = "Personal"
-    WOR = "Work"
+def taskDisplay(task : Task,
+                task_type : str,
+                REG = "Regular",
+                PER = "Personal",
+                WOR = "Work"):
     if task_type == REG:
         st.markdown(taskString(task), unsafe_allow_html=True)
     elif task_type == PER:

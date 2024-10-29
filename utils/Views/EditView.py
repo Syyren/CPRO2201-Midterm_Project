@@ -22,11 +22,13 @@ def editView(task,
              REG = "Regular",
              PER = "Personal",
              WOR = "Work"):
+    #setting some default values since the form will be interacting with elements pulled from the database
     field_date_and_time : datetime = None
     field_date = None
     field_time = None
-
-    date_check = st.checkbox(date_check_text)
+    #declaring the checkbox to be on when the form is initialized
+    date_check = st.checkbox(date_check_text, value=True)
+    #checking the task type and dynamically generating elements based on the type
     if task_type == PER:
         friend_slider = st.slider("Friends", 0, 5, len(task.getFriends()))
     elif task_type == WOR:
@@ -34,7 +36,7 @@ def editView(task,
     with st.form(f"edit_form_{hash(task.getId())}"):
         title = st.text_input(title_txt, value=task.getTitle())
         description = st.text_input(desc_txt, value=task.getDescription())
-        due_date = task.getDueDate()
+        #determining more elements based on whether the user wants to include a date or not
         if date_check:
             if task.getDueDate():
                 field_date_and_time = task.getDueDate()
@@ -42,6 +44,7 @@ def editView(task,
                 field_time = field_date_and_time.time()
             due_date = st.date_input(due_txt, field_date)
             due_time = st.time_input(time_txt, field_time)
+        #generating fields based off a slider for friends/collaborators
         if task_type == PER:
             friends = []
             for i in range(friend_slider):
@@ -63,7 +66,9 @@ def editView(task,
             len_hour = st.slider("Hours", 0, 12, task.getLengthHrs())
             len_mins = st.slider("Minutes", 0, 60, task.getLengthMins())
         submitted = st.form_submit_button(submit_txt)
+        #this triggers once the submit button is launched
         if submitted:
+            #error handling
             print(f"\"{title}\" update submitted.")
             if title == "":
                 st.error("Title can't be blank!")
@@ -84,6 +89,9 @@ def editView(task,
                     new_task.setFriends(friends)
                 else:
                     new_task.setFriends([])
+                if date_check:
+                    if due_date and due_time:
+                        task.setDueDate(datetime.combine(due_date, due_time))
                 updatePersonalTask(new_task)
             elif task_type == WOR:
                 new_task = WorkTask(title, description)
@@ -95,5 +103,8 @@ def editView(task,
                 else:
                     new_task.setCollaborators([])
                 new_task.setLengthWithValues(len_hour, len_mins)
+                if date_check:
+                    if due_date and due_time:
+                        task.setDueDate(datetime.combine(due_date, due_time))
                 updateWorkTask(new_task)
             st.rerun()
