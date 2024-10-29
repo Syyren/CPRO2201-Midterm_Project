@@ -1,3 +1,4 @@
+/* styling the regular card class to have a rounded square shape with a dark blue hue*/
 .card{
     background-color: #232330;
     border-radius: 10px;
@@ -9,7 +10,7 @@
     flex-direction: column;
     margin-bottom: 10px;
 }
-
+/* styling the various types of task cards specifically*/
 .per{
     background-color: #33181e;
 }
@@ -17,11 +18,11 @@
 .wor{
     background-color: #152e28;
 }
-
+/* making the title font large */
 .title{
     font-size: large;
 }
-
+/* styling the due and created classes to have the same colour and size, separate classes in case we want to alter them individually down the line */
 .due, .created{
     color: #858585;
     font-size: smaller;
