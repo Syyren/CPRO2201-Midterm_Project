@@ -45,6 +45,52 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
         else:
             st.write("Please select the type of tasks you'd like to view.")
 
+#function that generates the layout before gathering the edit view
+def taskLayout(task_list : list, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
+    for task in task_list:
+        if type(task) is Task:
+            task_type = REG
+        elif type(task) is PersonalTask:
+            task_type = PER 
+        elif type(task) is WorkTask:
+            task_type = WOR
+        #printing in the console for logging
+        task.displayAttributes()
+        taskFormat(task, task_type)
+        col1, col2 = st.columns([1,1])
+        #these buttons are dynamically generated with a hash of the correlated task id
+        with col1:
+            edit = st.button(f"Edit \"{task.getTitle()}\"", key=f"edit_{hash(task.getId())}\"")
+            if edit:
+                editView(task, task_type)
+        with col2:
+            delete = st.button(f"Delete \"{task.getTitle()}\"", key=f"delete_{hash(task.getId())}\"")
+            if delete:
+                deleteView(task, task_type)
+
+#function that writes details for a task
+def taskFormat(task : Task, task_type : str, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):            
+    if task_type == REG:
+        st.markdown(taskString(task), unsafe_allow_html=True)
+    #gathering extra data for the non-regular tasks to put into the html
+    elif task_type == PER:
+        extra_data = ""
+        if len(task.getFriends()) > 0:
+            extra_data += f"<p>With: {printList(task.getFriends())}</p>"
+        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
+    elif task_type == WOR:
+        extra_data = ""
+        if len(task.getCollaborators()) > 0:
+                extra_data += f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
+        #unique dialogue for varying conditions of task session length
+        if task.getLengthMins() > 0 and task.getLengthHrs() > 0:
+            extra_data += f"<p>Length: {task.getLengthHrs()} hours and {task.getLengthMins()} minutes.</p>"
+        elif task.getLengthMins() > 0:
+            extra_data += f"<p>Length: {task.getLengthMins()} minutes.</p>"
+        elif task.getLengthHrs() > 0:
+            extra_data += f"<p>Length: {task.getLengthHrs()} hours.</p>"
+        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
+
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
     #formatting the description field
@@ -67,60 +113,3 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
     </div>
     '''
     return string
-
-#function that generates the layout before gathering the edit view
-def taskLayout(task_list : list, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
-    for task in task_list:
-        if type(task) is Task:
-            task_type = REG
-        elif type(task) is PersonalTask:
-            task_type = PER 
-        elif type(task) is WorkTask:
-            task_type = WOR
-        task.displayAttributes()
-        taskDisplay(task, task_type)
-        col1, col2 = st.columns([1,1])
-        #these buttons are dynamically generated with a hash of the correlated task id
-        with col1:
-            edit = st.button(f"Edit \"{task.getTitle()}\"", key=f"edit_{hash(task.getId())}\"")
-            if edit:
-                editView(task, task_type)
-        with col2:
-            delete = st.button(f"Delete \"{task.getTitle()}\"", key=f"delete_{hash(task.getId())}\"")
-            if delete:
-                deleteView(task, task_type)
-
-#function that writes details for a task
-def taskDisplay(task : Task, task_type : str, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):            
-    if task_type == REG:
-        st.markdown(taskString(task), unsafe_allow_html=True)
-    #gathering extra data for the non-regular tasks to put into the html
-    elif task_type == PER:
-        extra_data = ""
-        if len(task.getFriends()) > 0:
-            extra_data += f"<p>With: {printList(task.getFriends())}</p>"
-        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
-    elif task_type == WOR:
-        extra_data = ""
-        if len(task.getCollaborators()) > 0:
-                extra_data += f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
-        #unique dialogue for varying conditions of task session length
-        if task.getLengthMins() > 0 and task.getLengthHrs() > 0:
-            extra_data += f"<p>Length: {task.getLengthHrs()} hours and {task.getLengthMins()} minutes.</p>"
-        elif task.getLengthMins() > 0:
-            extra_data += f"<p>Length: {task.getLengthMins()} minutes.</p>"
-        elif task.getLengthHrs() > 0:
-            extra_data += f"<p>Length: {task.getLengthHrs()} hours.</p>"
-        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
-
-#function that checks a list and then prints the tasks accordingly
-def taskPrint(type_list : list):
-    if len(type_list) == 0:
-        st.error("No tasks available")
-        print(f"Requested task type has none stored in database.")
-    elif type(type_list[0]) is Task:
-        taskLayout(type_list)
-    elif type(type_list[0]) is PersonalTask:
-        taskLayout(type_list)
-    elif type(type_list[0]) is WorkTask:
-        taskLayout(type_list)
