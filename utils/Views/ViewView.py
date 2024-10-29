@@ -48,10 +48,10 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
     if desc_check:
         desc = desc_check
     #formatting the due date field
-    due_date = "<p>Due: No date assigned.</p>"
+    due_date = "<p class=\"due\">Due: No date assigned.</p>"
     due_check = task.getDueDate()
     if due_check:
-        due_date = f"<p>Due: {due_check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
+        due_date = f"<p class=\"due\">Due: {due_check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
     <div class="card">
         <p class="title">{task.getTitle()}</p>
@@ -70,11 +70,11 @@ def taskLayout(task_type : str, type_list : list):
         taskDisplay(task, task_type)
         col1, col2 = st.columns([1,1])
         with col1:
-            edit = st.button(f"Edit \"{task.getTitle()}", key=f"edit_{hash(task.getId())}\"")
+            edit = st.button(f"Edit \"{task.getTitle()}\"", key=f"edit_{hash(task.getId())}\"")
             if edit:
                 editView(task, task_type)
         with col2:
-            delete = st.button(f"Delete \"{task.getTitle()}", key=f"delete_{hash(task.getId())}\"")
+            delete = st.button(f"Delete \"{task.getTitle()}\"", key=f"delete_{hash(task.getId())}\"")
             if delete:
                 deleteView(task, task_type)
 

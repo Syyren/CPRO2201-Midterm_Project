@@ -1,5 +1,5 @@
 .card{
-    background-color: #131316;
+    background-color: #232330;
     border-radius: 10px;
     border-width: 3px;
     padding: 5px;
@@ -14,6 +14,7 @@
     font-size: large;
 }
 
-.created{
-    color: #9c9c9c;
+.due, .created{
+    color: #858585;
+    font-size: smaller;
 }
