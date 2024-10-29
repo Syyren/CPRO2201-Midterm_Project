@@ -35,7 +35,7 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
                     list_of_task_lists.append(personal_tasks)
                 elif task_type == WOR:
                     list_of_task_lists.append(work_tasks)
-            st.write(f"Viewing details for your \"{printList(task_types)}\" tasks.")
+            st.write(f"Viewing details for your {printList(task_types)} tasks.")
             #displaying an ordered by due date list of tasks
             for task_list in list_of_task_lists:
                 tasks += task_list
@@ -101,6 +101,13 @@ def taskFormat(task : Task, task_type : str, REG : str = "Regular", PER : str = 
 
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
+    #extra formatting to alter how the different tasks are styled
+    if type(task) is Task:
+        style = "reg"
+    if type(task) is PersonalTask:
+        style = "per"
+    if type(task) is WorkTask:
+        style = "wor"
     #formatting the description field
     desc = "No Description."
     desc_check = task.getDescription()
@@ -112,7 +119,7 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
     if due_check:
         due_date = f"<p class=\"due\">Due: {due_check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
-    <div class="card">
+    <div class="card {style}">
         <p class="title">{task.getTitle()}</p>
         <p>\"{desc}\"</p>
         {extra_data}
