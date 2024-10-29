@@ -15,9 +15,7 @@ class PersonalTask(Task):
         return self._friends
     
     def setFriends(self, friends : list):
-        if len(friends) > 0:
-            for friend in friends:
-                self._friends.append(friend)
+        self._friends = friends
 
 #just testing
 if __name__ == "__main__":
