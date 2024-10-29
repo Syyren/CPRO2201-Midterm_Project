@@ -42,14 +42,20 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
 
 #returns a string that's formatted depending on the type of task
 def taskString(task : Task, extra_data : str = "<p></p>"):
+    #formatting the description field
+    desc = "No Description."
+    desc_check = task.getDescription()
+    if desc_check:
+        desc = desc_check
+    #formatting the due date field
     due_date = "<p>Due: No date assigned.</p>"
-    check = task.getDueDate()
-    if check:
-        due_date = f"<p>Due: {check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
+    due_check = task.getDueDate()
+    if due_check:
+        due_date = f"<p>Due: {due_check.strftime("%a, %b %d, %Y at %I:%M%p")}</p>"
     string = f'''
     <div class="card">
         <p class="title">{task.getTitle()}</p>
-        <p>\"{task.getDescription()}\"</p>
+        <p>\"{desc}\"</p>
         {extra_data}
         {due_date}
         <p class="created">Created on: {task.getCreationDate().strftime("%a, %b %d, %Y at %I:%M%p")}</p>
@@ -73,22 +79,21 @@ def taskLayout(task_type : str, type_list : list):
                 deleteView(task, task_type)
 
 #function that writes details for a task
-def taskDisplay(task : Task,
-                task_type : str,
-                REG = "Regular",
-                PER = "Personal",
-                WOR = "Work"):
+def taskDisplay(task : Task, task_type : str, REG = "Regular", PER = "Personal", WOR = "Work"):
+                
     if task_type == REG:
         st.markdown(taskString(task), unsafe_allow_html=True)
+    #gathering extra data for the non-regular tasks to put into the html
     elif task_type == PER:
-        friends = ""
+        extra_data = ""
         if len(task.getFriends()) > 0:
-            friends = f"<p>With: {printList(task.getFriends())}</p>"
-        st.markdown(taskString(task, friends), unsafe_allow_html=True)
+            extra_data += f"<p>With: {printList(task.getFriends())}</p>"
+        st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
     elif task_type == WOR:
         extra_data = ""
         if len(task.getCollaborators()) > 0:
-                extra_data = f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
+                extra_data += f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
+        #unique dialogue for varying conditions of task session length
         if task.getLengthMins() > 0 and task.getLengthHrs() > 0:
             extra_data += f"<p>Length: {task.getLengthHrs()} hours and {task.getLengthMins()} minutes.</p>"
         elif task.getLengthMins() > 0:
@@ -101,7 +106,7 @@ def taskDisplay(task : Task,
 def taskPrint(type_list : list):
     if len(type_list) == 0:
         st.error("No tasks available")
-        print("Selected empty list")
+        print(f"Requested task type has none stored in database.")
     elif type(type_list[0]) is Task:
         taskLayout("Regular", type_list)
     elif type(type_list[0]) is PersonalTask:

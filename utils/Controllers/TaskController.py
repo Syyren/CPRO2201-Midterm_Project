@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from ..Models.Task import Task
@@ -44,7 +45,7 @@ def updateTask(new_task : Task):
                                     {"$set": 
                                         {'title' : new_task.getTitle(),
                                          'description' : new_task.getDescription(),
-                                         'due_date':new_task.getDueDate()
+                                         'due_date': new_task.getDueDate()
                                         }
                                     })
     print(f"Update For ID: {task_id}")

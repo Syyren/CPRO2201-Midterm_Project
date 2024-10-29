@@ -10,9 +10,10 @@ def userLogin():
     
 #function that defines the main display for the application, displays a login screen until user logs in
 def mainDisplay():
+    #initializing a session state to register when the user logs in. atm this is just checking for the login button to be clicked.
     if 'clicked' not in st.session_state:
         st.session_state.clicked = False
-        
+    #when the user logs in it renders the home page and navigation side bar
     if st.session_state.clicked:
         create_task = "Create Task"
         view_tasks = "View Tasks"
@@ -23,6 +24,7 @@ def mainDisplay():
         elif option == view_tasks:
             viewView()
     else:
+        #layout for centering elements, making the middle element 3 times the size of the left and right
         col1, col2, col3 = st.columns([1, 3, 1])
         with col2:
                 st.write("Thank you for choosing TaskMan!")

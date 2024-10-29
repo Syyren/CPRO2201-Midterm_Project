@@ -1,4 +1,4 @@
-#module that's basically a confirmation window
+#module that's basically a confirmation window for deleting a task
 
 import streamlit as st
 from ..Models.Task import Task
@@ -17,11 +17,13 @@ def deleteView(task : Task,
                WOR : str = "Work"):
     st.write(f"Would you like to delete \"{task.getTitle()}\"?")
     btn = False
+    #ensuring the correct removal is happening from the right controller
     if task_type == REG:
         btn = st.button("Yes", on_click=deleteTask, args=(task,))
     elif task_type == PER:
         btn = st.button("Yes", on_click=deletePersonalTask, args=(task,))
     elif task_type == WOR:
         btn = st.button("Yes", on_click=deleteWorkTask, args=(task,))
+    #essentially the onclick refreshes the page to close the dialogue after deleting the task
     if btn:
         st.rerun()

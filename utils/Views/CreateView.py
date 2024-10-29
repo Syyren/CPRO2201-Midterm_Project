@@ -1,7 +1,7 @@
 #module that returns the partial create view
 
 import streamlit as st
-import datetime
+from datetime import datetime
 from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
@@ -20,11 +20,9 @@ def success(task_title : str):
 
 #function that defines the view when create is selected, allows user to make new task
 def createView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
-    left_column, right_column = st.columns([2, 1])
-    
+    left_column, right_column = st.columns([2, 1]) 
     with right_column:
         task_type = st.radio("Select type of task", (REG, PER, WOR))
-    
     with left_column:
         st.write(f"Please enter the details for your {task_type} task.")
         if task_type == REG:
@@ -42,9 +40,7 @@ def formGenerator(form_name,
                   due_txt = "Date",
                   time_txt = "Time",
                   submit_txt = "Submit",
-                  REG = "Regular",
-                  PER = "Personal",
-                  WOR = "Work"):
+                  REG = "Regular", PER = "Personal", WOR = "Work"):
     #declaring the checkbox to be on when the form is initialized
     date_check = st.checkbox(date_check_text, value=True)
     #checking the form type and dynamically generating elements based on the type
@@ -60,7 +56,7 @@ def formGenerator(form_name,
         if date_check:
             due_date = st.date_input(due_txt)
             due_time = st.time_input(time_txt)
-            due = datetime.datetime.combine(due_date, due_time)
+            due = datetime.combine(due_date, due_time)
         #generating fields based off a slider for friends/collaborators
         if form_name == PER:
             friends = []
@@ -83,11 +79,14 @@ def formGenerator(form_name,
             if title == "":
                 st.error("Title can't be blank!")
                 return
+            #creating the various tasks based on the type they are using the form name variable
+            #Regular Task
             elif form_name == REG:
                 task = Task(title, description)
                 if due:
                     task.setDueDate(due)
                 createTask(task)
+            #Personal Task
             elif form_name == PER:
                 task = PersonalTask(title, description)
                 if len(friends) > 0:
@@ -95,6 +94,7 @@ def formGenerator(form_name,
                 if due:
                     task.setDueDate(due)
                 createPersonalTask(task)
+            #Work Task
             elif form_name == WOR:
                 task = WorkTask(title, description)
                 if len(collaborators) > 0:
@@ -103,4 +103,5 @@ def formGenerator(form_name,
                     task.setDueDate(due)
                 task.setLengthWithValues(len_hour, len_mins)
                 createWorkTask(task)
+            #displays a confirmation pop up that it fully executed
             success(task.getTitle())
