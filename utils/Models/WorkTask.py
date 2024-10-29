@@ -17,10 +17,10 @@ collaborators: {self.getCollaborators()}''')
         return self._length
 
     def setLengthWithValues(self, length_hrs: int, length_mins: int):
-        if length_mins < 60:
+        if length_mins in range(0, 61) and length_hrs in range(0, 13):
             self._length = f"{length_hrs}:{length_mins}"
         else:
-            self._length = None
+            self._length = "0:0"
 
     def setLength(self, length: str):
         self._length = length
