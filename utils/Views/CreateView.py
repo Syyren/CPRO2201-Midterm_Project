@@ -71,7 +71,7 @@ def formGenerator(form_name,
                 if collaborator_name:
                     collaborators.append(collaborator_name)
             len_hour = st.slider("Hours", 0, 12, 0)
-            len_mins = st.slider("Minutes", 0, 60, 0)
+            len_mins = st.slider("Minutes", 0, 59, 0)
         submitted = st.form_submit_button(submit_txt)
         #this triggers once the submit button is launched
         if submitted:

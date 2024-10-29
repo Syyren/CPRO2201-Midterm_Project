@@ -18,7 +18,7 @@ collaborators: {self.getCollaborators()}''')
     
     #sets the length via two inputted numbers rather than the standard string
     def setLengthWithValues(self, length_hrs: int, length_mins: int):
-        if length_mins in range(0, 61) and length_hrs in range(0, 13):
+        if length_mins in range(0, 60) and length_hrs in range(0, 13):
             self._length = f"{length_hrs}:{length_mins}"
         else:
             self._length = "0:0"

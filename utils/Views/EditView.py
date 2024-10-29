@@ -62,7 +62,7 @@ def editView(task, task_type : str,
                 if collaborator_name:
                     collaborators.append(collaborator_name)
             len_hour = st.slider("Hours", 0, 12, task.getLengthHrs())
-            len_mins = st.slider("Minutes", 0, 60, task.getLengthMins())
+            len_mins = st.slider("Minutes", 0, 59, task.getLengthMins())
         submitted = st.form_submit_button(submit_txt)
         #this triggers once the submit button is launched
         if submitted:
