@@ -10,6 +10,7 @@ def userLogin():
     
 #function that defines the main display for the application, displays a login screen until user logs in
 def mainDisplay():
+    st.set_page_config(page_title="TaskMan, A Task Manager", page_icon="🐱")
     #initializing a session state to register when the user logs in. atm this is just checking for the login button to be clicked.
     if 'clicked' not in st.session_state:
         st.session_state.clicked = False
