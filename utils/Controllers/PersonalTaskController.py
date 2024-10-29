@@ -43,7 +43,7 @@ def updatePersonalTask(new_task : PersonalTask):
                                         {'title' : new_task.getTitle(),
                                          'description' : new_task.getDescription(),
                                          'due_date':new_task.getDueDate(),
-                                         "friends" : new_task.getFriends()
+                                         'friends':new_task.getFriends()
                                         }
                                     })
     print(f"Update For ID: {task_id}")
