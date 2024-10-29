@@ -26,17 +26,22 @@ def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
     with col2:
         #generates the list of tasks or prints a select prompt
         if len(task_types) > 0:
-            task_list = []
+            tasks : list = []
+            list_of_task_lists : list = []
             for task_type in task_types:
                 if task_type == REG:
-                    task_list.append(regular_tasks)
+                    list_of_task_lists.append(regular_tasks)
                 elif task_type == PER:
-                    task_list.append(personal_tasks)
+                    list_of_task_lists.append(personal_tasks)
                 elif task_type == WOR:
-                    task_list.append(work_tasks)
+                    list_of_task_lists.append(work_tasks)
             st.write(f"Viewing details for your \"{printList(task_types)}\" tasks.")
-            for type_list in task_list:
-                taskPrint(type_list)
+            #displaying an ordered by due date list of tasks
+            for task_list in list_of_task_lists:
+                tasks += task_list
+            #sorting by due date and displaying tasks with no due date first
+            tasks = sorted(tasks, key=lambda t: (t.getDueDate() is not None, t.getDueDate()))
+            taskLayout(tasks)
         else:
             st.write("Please select the type of tasks you'd like to view.")
 
@@ -64,11 +69,18 @@ def taskString(task : Task, extra_data : str = "<p></p>"):
     return string
 
 #function that generates the layout before gathering the edit view
-def taskLayout(task_type : str, type_list : list):
-    for task in type_list:
+def taskLayout(task_list : list, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
+    for task in task_list:
+        if type(task) is Task:
+            task_type = REG
+        elif type(task) is PersonalTask:
+            task_type = PER 
+        elif type(task) is WorkTask:
+            task_type = WOR
         task.displayAttributes()
         taskDisplay(task, task_type)
         col1, col2 = st.columns([1,1])
+        #these buttons are dynamically generated with a hash of the correlated task id
         with col1:
             edit = st.button(f"Edit \"{task.getTitle()}\"", key=f"edit_{hash(task.getId())}\"")
             if edit:
@@ -79,8 +91,7 @@ def taskLayout(task_type : str, type_list : list):
                 deleteView(task, task_type)
 
 #function that writes details for a task
-def taskDisplay(task : Task, task_type : str, REG = "Regular", PER = "Personal", WOR = "Work"):
-                
+def taskDisplay(task : Task, task_type : str, REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):            
     if task_type == REG:
         st.markdown(taskString(task), unsafe_allow_html=True)
     #gathering extra data for the non-regular tasks to put into the html
@@ -108,8 +119,8 @@ def taskPrint(type_list : list):
         st.error("No tasks available")
         print(f"Requested task type has none stored in database.")
     elif type(type_list[0]) is Task:
-        taskLayout("Regular", type_list)
+        taskLayout(type_list)
     elif type(type_list[0]) is PersonalTask:
-        taskLayout("Personal", type_list)
+        taskLayout(type_list)
     elif type(type_list[0]) is WorkTask:
-        taskLayout("Work", type_list)
+        taskLayout(type_list)
