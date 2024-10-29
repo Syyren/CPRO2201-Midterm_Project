@@ -29,6 +29,6 @@ def mainDisplay():
         col1, col2, col3 = st.columns([1, 3, 1])
         with col2:
                 st.write("Thank you for choosing TaskMan!")
-                email = st.text_input("Email")
-                st.button("Login", on_click=userLogin)
+                # email = st.text_input("Email")
+                st.button("Start", on_click=userLogin)
     
