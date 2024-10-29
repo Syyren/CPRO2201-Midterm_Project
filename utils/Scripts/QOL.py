@@ -5,6 +5,12 @@ from ..Models.Task import Task
 from ..Models.PersonalTask import PersonalTask
 from ..Models.WorkTask import WorkTask
 
+#function that pluralizes a word depending on value of an int
+def pluralString(num : int, string : str, plural_string : str):
+    if num != 1:
+        return plural_string
+    return string
+
 #function that applies CSS to page
 def applyCSS():
     with open("utils/Views/ViewViewStyle.css") as stylesheet:

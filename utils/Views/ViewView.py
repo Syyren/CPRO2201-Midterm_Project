@@ -9,7 +9,7 @@ from ..Controllers.PersonalTaskController import getAllPersonalTasks
 from ..Controllers.WorkTaskController import getAllWorkTasks
 from .EditView import editView
 from .DeleteView import deleteView
-from ..Scripts.QOL import applyCSS, printList
+from ..Scripts.QOL import applyCSS, printList, pluralString
 
 #function that defines the view when view task is selected, allows user to view and delete their tasks
 def viewView(REG : str = "Regular", PER : str = "Personal", WOR : str = "Work"):
@@ -77,18 +77,26 @@ def taskFormat(task : Task, task_type : str, REG : str = "Regular", PER : str = 
         extra_data = ""
         if len(task.getFriends()) > 0:
             extra_data += f"<p>With: {printList(task.getFriends())}</p>"
+        else:
+            extra_data += "<span></span>"
         st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
     elif task_type == WOR:
         extra_data = ""
         if len(task.getCollaborators()) > 0:
                 extra_data += f"<p>Collaborators: {printList(task.getCollaborators())}</p>"
+        else:
+            extra_data += "<span></span>"
         #unique dialogue for varying conditions of task session length
-        if task.getLengthMins() > 0 and task.getLengthHrs() > 0:
-            extra_data += f"<p>Length: {task.getLengthHrs()} hours and {task.getLengthMins()} minutes.</p>"
+        len_hrs = task.getLengthHrs()
+        len_mins = task.getLengthMins()
+        hours_string = pluralString(len_hrs, "hour", "hours")
+        minutes_string = pluralString(len_mins, "minute", "minutes")
+        if len_hrs > 0 and len_mins > 0:
+            extra_data += f"<p>Length: {len_hrs} {hours_string} and {len_mins} {minutes_string}.</p>"
         elif task.getLengthMins() > 0:
-            extra_data += f"<p>Length: {task.getLengthMins()} minutes.</p>"
-        elif task.getLengthHrs() > 0:
-            extra_data += f"<p>Length: {task.getLengthHrs()} hours.</p>"
+            extra_data += f"<p>Length: {len_mins} {minutes_string}.</p>"
+        elif len_hrs > 0:
+            extra_data += f"<p>Length: {len_hrs} {hours_string}.</p>"
         st.markdown(taskString(task, extra_data), unsafe_allow_html=True)
 
 #returns a string that's formatted depending on the type of task
